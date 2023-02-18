@@ -23,6 +23,12 @@ return new class extends Migration
             $table->string('kategori_lain')->nullable();
             $table->string('deskripsi');
             $table->string('dokumentasi');
+            $table->boolean('pic_checked')->default(false);
+            $table->timestamp('pic_checked_at')->nullable();
+            $table->foreignId('pic')->nullable();
+            $table->boolean('completed')->default(false);
+            $table->timestamp('completed_at')->nullable();
+            $table->foreignId('completed_by')->nullable();
             $table->timestamps();
         });
     }

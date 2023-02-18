@@ -13,14 +13,14 @@
 </head>
 
 <body>
-    <section class="vh-100" style="background-color: cadetblue;">
+    <section class="vh-100" style="background-color: lightgray;">
         <div class="container py-5 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col col-xl-10">
                     <div class="card" style="border-radius: 1rem;">
                         <div class="row g-0">
                             <div class="col-md-6 col-lg-5 d-none d-md-block">
-                                <img src="assets/img/safety3.jpg" alt="login form" class="img-fluid"
+                                <img src="assets/img/safety.jpg" alt="login form" class="img-fluid"
                                     style="border-radius: 1rem 0 0 1rem; object-fit: cover;" />
                             </div>
                             <div class="col-md-6 col-lg-7 d-flex align-items-center">
@@ -36,6 +36,16 @@
 
                                         <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Sign into your
                                             account</h5>
+                                        @if ($errors->any())
+                                            <div class="alert alert-danger">
+                                                <ul>
+                                                    @foreach ($errors->all() as $error)
+                                                        <li>{{ $error }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            </div>
+                                        @endif
+
                                         <div class="mb-4">
                                             <div class="form-outline">
                                                 <input type="text" id="username" name="username" autofocus

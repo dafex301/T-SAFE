@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Laporan;
+use App\Models\Kategori;
 use App\Http\Requests\StoreLaporanRequest;
 use App\Http\Requests\UpdateLaporanRequest;
 
@@ -25,7 +26,10 @@ class LaporanController extends Controller
      */
     public function create()
     {
-        return view('lapor');
+        // Return view lapor with kategori data
+        return view('lapor', [
+            'kategori' => Kategori::all(),
+        ]);
     }
 
     /**
@@ -36,7 +40,45 @@ class LaporanController extends Controller
      */
     public function store(StoreLaporanRequest $request)
     {
-        //
+        $this->validate($request, [
+            'tanggal' => 'required|date',
+            'lokasi' => 'required|string',
+            'kategori' => 'required',
+            'deskripsi' => 'required|string',
+            'dokumentasi' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        // Check if kategori is 6 (Lain-lain)
+        if ($request->kategori == 6) {
+            $this->validate($request, [
+                'kategori_lain' => 'required|string',
+            ]);
+        }
+
+        // Upload Image, change the name file to current timestamp_lokasi_user.name
+        // $imageName = time() . '_' . $request->lokasi . '_' . auth()->user()->name . '.' . $request->dokumentasi->extension();
+
+        // Save to public/dokumentasi and get the file path
+        // $request->dokumentasi->move(public_path('dokumentasi'), $imageName);
+        // $filePath = public_path('dokumentasi') . '/' . $imageName;
+
+        // $filePath = $request->file('dokumentasi')->store('dokumentasi', 'public');
+        // Change the filename to current timestamp_lokasi_user.name before store to db
+        $filePath = $request->file('dokumentasi')->storeAs('dokumentasi', time() . '_' . $request->lokasi . '_' . auth()->user()->name . '.' . $request->dokumentasi->extension(), 'public');
+
+        // Create new Laporan
+        $laporan = Laporan::create([
+            'pelapor' => auth()->user()->id,
+            'tanggal' => $request->tanggal,
+            'lokasi' => $request->lokasi,
+            'kategori' => $request->kategori,
+            'is_kategori_lain' => $request->kategori == 6 ? true : false,
+            'kategori_lain' => $request->kategori == 6 ? $request->kategori_lain : null,
+            'deskripsi' => $request->deskripsi,
+            'dokumentasi' => $filePath,
+        ]);
+
+        return redirect()->route('laporan.index')->with('success', 'Laporan berhasil dibuat!');
     }
 
     /**

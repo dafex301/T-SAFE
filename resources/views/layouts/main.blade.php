@@ -158,9 +158,9 @@
         // Initiate Date
         document.getElementById('inputTanggal').valueAsDate = new Date();
 
-        // Jenis lain input
+        // If the option selected is "Lain-lain" (but not from the option value, from the text option), show the input field
         $('#jenis').change(function() {
-            if ($(this).val() == 'Lain-lain') {
+            if ($(this).find('option:selected').text() == 'Lain-lain') {
                 $('#jenis-lain-container').show();
             } else {
                 $('#jenis-lain-container').hide();
@@ -231,15 +231,6 @@
 
     <!-- Upload Preview -->
     <script>
-        // If id jenis have value Lain-lain, show input jenis lain
-        $('#jenis').change(function() {
-            if ($(this).val() == 'Lain-lain') {
-                $('#jenis-lain-container').show();
-            } else {
-                $('#jenis-lain-container').hide();
-            }
-        });
-
         // When upload image, show preview, keep the ratio to original
         $('#dokumentasi').change(function() {
             var file = this.files[0];
