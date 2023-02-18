@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Throwable;
 use Illuminate\Http\Request;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
@@ -28,17 +29,14 @@ class LoginController extends Controller
     public function login(LoginRequest $request)
     {
         $credentials = $request->getCredentials();
-
-        if (!Auth::validate($credentials)) :
+        try {
+            $user = Auth::getProvider()->retrieveByCredentials($credentials);
+            Auth::login($user);
+            return $this->authenticated($request, $user);
+        } catch (Throwable $e) {
             return redirect()->to('login')
                 ->withErrors(trans('auth.failed'));
-        endif;
-
-        $user = Auth::getProvider()->retrieveByCredentials($credentials);
-
-        Auth::login($user);
-
-        return $this->authenticated($request, $user);
+        }
     }
 
     /**
