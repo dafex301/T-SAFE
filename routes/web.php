@@ -13,10 +13,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-});
+Route::group(['namespace' => 'App\Http\Controllers'], function () {
+    // Dashboard Routes
+    Route::get('/', 'DashboardController@index')->name('dashboard.index');
 
-Route::get('/login', function () {
-    return view('login');
+    // Authentication Routes
+    Route::group(['middleware' => ['guest']], function () {
+        // Register Routes
+        Route::get('/register', 'RegisterController@show')->name('register.show');
+        Route::post('/register', 'RegisterController@register')->name('register.register');
+
+        // Login Routes
+        Route::get('/login', 'LoginController@show')->name('login.show');
+        Route::post('/login', 'LoginController@login')->name('login.login');
+    });
+
+    Route::group(['middleware' => ['auth']], function () {
+        // Logout Routes
+        Route::get('/logout', 'LogoutController@perform')->name('logout.perform');
+    });
 });
