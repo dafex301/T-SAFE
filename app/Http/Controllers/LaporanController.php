@@ -16,7 +16,10 @@ class LaporanController extends Controller
      */
     public function index()
     {
-        return view('laporan');
+        return view('laporan', [
+            'laporan' => Laporan::all(),
+            'kategori' => Kategori::all(),
+        ]);
     }
 
     /**
@@ -55,16 +58,9 @@ class LaporanController extends Controller
             ]);
         }
 
-        // Upload Image, change the name file to current timestamp_lokasi_user.name
-        // $imageName = time() . '_' . $request->lokasi . '_' . auth()->user()->name . '.' . $request->dokumentasi->extension();
-
-        // Save to public/dokumentasi and get the file path
-        // $request->dokumentasi->move(public_path('dokumentasi'), $imageName);
-        // $filePath = public_path('dokumentasi') . '/' . $imageName;
-
-        // $filePath = $request->file('dokumentasi')->store('dokumentasi', 'public');
         // Change the filename to current timestamp_lokasi_user.name before store to db
-        $filePath = $request->file('dokumentasi')->storeAs('dokumentasi', time() . '_' . $request->lokasi . '_' . auth()->user()->name . '.' . $request->dokumentasi->extension(), 'public');
+        $filePath = $request->file('dokumentasi')
+            ->storeAs('dokumentasi', time() . '_' . $request->lokasi . '_' . auth()->user()->name . '.' . $request->dokumentasi->extension(), 'public');
 
         // Create new Laporan
         $laporan = Laporan::create([

@@ -278,21 +278,19 @@
 
     <!-- Modal Data -->
     <script>
-        const editModal = document.getElementById('editModal')
-        editModal.addEventListener('show.bs.modal', event => {
+        const imageModal = document.getElementById('imageModal')
+        imageModal.addEventListener('show.bs.modal', event => {
             // Button that triggered the modal
             const button = event.relatedTarget
             // Extract info from data-bs-* attributes
-            const recipient = button.getAttribute('data-bs-whatever')
+            const image = button.getAttribute('data-bs-whatever')
             // If necessary, you could initiate an AJAX request here
             // and then do the updating in a callback.
             //
             // Update the modal's content.
-            const modalTitle = editModal.querySelector('.modal-title')
-            const modalBodyInput = editModal.querySelector('.modal-body input')
+            const modalBody = imageModal.querySelector('.modal-body')
+            modalBody.innerHTML = `<img src="storage/${image}" class="img-fluid" alt="Responsive image">`
 
-            modalTitle.textContent = `New message to ${recipient}`
-            modalBodyInput.value = recipient
         })
     </script>
 

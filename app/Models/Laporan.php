@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
+use App\Models\Kategori;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Laporan extends Model
 {
@@ -27,8 +29,27 @@ class Laporan extends Model
     ];
 
     // Relation with Kategori
-    public function kategori()
+    public function Kategori()
     {
-        return $this->belongsTo(Kategori::class);
+        return $this->belongsTo(Kategori::class, 'kategori');
+    }
+
+    // Relation with User
+    // Pelapor
+    public function Pelapor()
+    {
+        return $this->belongsTo(User::class, 'pelapor');
+    }
+
+    // PIC
+    public function PIC()
+    {
+        return $this->belongsTo(User::class, 'pic');
+    }
+
+    // Completed by
+    public function completed_by()
+    {
+        return $this->belongsTo(User::class, 'completed_by');
     }
 }
