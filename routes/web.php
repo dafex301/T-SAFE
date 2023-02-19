@@ -17,7 +17,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     // Dashboard Routes
     Route::get('/', 'DashboardController@index')->name('dashboard.index');
 
-    // Authentication Routes
+    // Guest Routes
     Route::group(['middleware' => ['guest']], function () {
         // Register Routes
         Route::get('/register', 'RegisterController@show')->name('register.show');
@@ -28,7 +28,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::post('/login', 'LoginController@login')->name('login.perform');
     });
 
-    // User routes
+    // Auth Routes
     Route::group(['middleware' => ['auth']], function () {
         // Lapor Routes
         Route::get('/lapor', 'LaporanController@create')->name('lapor.create');
@@ -44,10 +44,34 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::get('/verifikasi/{id}', 'LaporanController@show')->name('laporan.show');
         Route::post('/verifikasi/{id}', 'LaporanController@verifikasi')->name('laporan.verifikasi');
 
+        // Tindak Lanjut Routes
+        Route::post('/tindaklanjut/{id}', 'LaporanController@tindaklanjut')->name('laporan.tindaklanjut');
+
         // History Routes
         Route::get('/history', 'LaporanController@history')->name('laporan.history');
 
         // Logout Routes
         Route::get('/logout', 'LogoutController@perform')->name('logout.perform');
+    });
+
+    // Admin Routes
+    Route::group(['middleware' => ['admin']], function () {
+        // User Routes
+        Route::get('/admin/akun', 'UserController@index')->name('user.index');
+        Route::post('/admin/akun', 'UserController@store')->name('user.store');
+        Route::put('/admin/akun/{id}', 'UserController@update')->name('user.update');
+        Route::delete('/admin/akun/{id}', 'UserController@destroy')->name('user.destroy');
+
+        // Role Routes
+        Route::get('/admin/role', 'RoleController@index')->name('role.index');
+        Route::post('/admin/role', 'RoleController@store')->name('role.store');
+        Route::put('/admin/role/{id}', 'RoleController@update')->name('role.update');
+        Route::delete('/admin/role/{id}', 'RoleController@destroy')->name('role.destroy');
+
+        // Kategori Routes
+        Route::get('/admin/kategori', 'KategoriController@index')->name('kategori.index');
+        Route::post('/admin/kategori', 'KategoriController@store')->name('kategori.store');
+        Route::put('/admin/kategori/{id}', 'KategoriController@update')->name('kategori.update');
+        Route::delete('/admin/kategori/{id}', 'KategoriController@destroy')->name('kategori.destroy');
     });
 });

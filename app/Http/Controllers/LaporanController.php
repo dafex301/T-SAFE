@@ -26,8 +26,10 @@ class LaporanController extends Controller
             $laporan = Laporan::where('pelapor', auth()->user()->id)->get();
         } else if ($role == 'PIC') {
             $laporan = Laporan::where('pic_checked', false)->get();
-        } else if ($role == 'DPP') {
-            $laporan = Laporan::where('pic_checked', true)->where('completed', false)->get();
+        } else if ($role == 'BM') {
+            $laporan = Laporan::where('pic_checked', true)->where('branch_manager_approval', false)->where('completed', false)->get();
+        } else if ($role == "DPnP") {
+            $laporan = Laporan::where('branch_manager_approval', true)->where('completed', false)->get();
         }
 
         return view('laporan', [
@@ -109,11 +111,22 @@ class LaporanController extends Controller
      */
     public function show(String $id)
     {
-        $laporan = Laporan::find($id);
-        return view('verifikasi', [
-            'laporan' => $laporan,
-            'kategori' => Kategori::all()
-        ]);
+        try {
+
+            $role = auth()->user()->Role->name;
+            $laporan = Laporan::find($id);
+
+            if (!$laporan->completed && $role == 'Staff') {
+                throw new \Throwable();
+            }
+
+            return view('verifikasi', [
+                'laporan' => $laporan,
+                'kategori' => Kategori::all()
+            ]);
+        } catch (\Throwable $th) {
+            return redirect()->route('laporan.index')->with('error', 'Anda tidak dapat mengakses laporan ini!');
+        }
     }
 
     /**
@@ -166,6 +179,52 @@ class LaporanController extends Controller
 
         return redirect()->route('laporan.index')->with('success', 'Laporan berhasil diubah!');
     }
+
+    /**
+     * Follow up the specified resource from PIC to DPP.
+     *
+     * @param  \App\Http\Requests\UpdateLaporanRequest  $request
+     * @param  \App\Models\Laporan  $laporan
+     * @return \Illuminate\Http\Response
+     */
+    public function tindaklanjut(UpdateLaporanRequest $request, String $id)
+    {
+        $this->validate($request, [
+            'lokasi' => 'required|string',
+            'kategori' => 'required',
+            'deskripsi' => 'required|string',
+            'immediate_action' => 'string',
+            'prevention' => 'string',
+        ]);
+
+        // Check if kategori is 6 (Lain-lain)
+        if ($request->kategori == 6) {
+            $this->validate($request, [
+                'kategori_lain' => 'required|string',
+            ]);
+        }
+
+        $laporan = Laporan::find($id);
+        $laporan->lokasi = $request->lokasi;
+        $laporan->kategori = $request->kategori;
+        $laporan->is_kategori_lain = $request->kategori == 6 ? true : false;
+        $laporan->kategori_lain = $request->kategori == 6 ? $request->kategori_lain : null;
+        $laporan->deskripsi = $request->deskripsi;
+        $laporan->immediate_action = $request->immediate_action;
+        $laporan->prevention = $request->prevention;
+        $laporan->pic = auth()->user()->id;
+        $laporan->pic_checked = true;
+        $laporan->pic_checked_at = now();
+
+
+
+
+
+        $laporan->save();
+
+        return redirect()->route('laporan.index')->with('success', 'Laporan berhasil ditindaklanjuti!');
+    }
+
 
     /**
      * Show the form for editing the specified resource.

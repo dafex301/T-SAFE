@@ -27,7 +27,12 @@ class UserSeeder extends Seeder
 
         User::factory()->create([
             'role' => 4,
-            'username' => 'dpp',
+            'username' => 'dpnp',
+        ]);
+
+        User::factory()->create([
+            'role' => 5,
+            'username' => 'bm',
         ]);
 
 

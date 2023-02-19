@@ -27,7 +27,10 @@ class RoleSeeder extends Seeder
                 'name' => 'PIC',
             ],
             [
-                'name' => 'DPP',
+                'name' => 'DPnP',
+            ],
+            [
+                'name' => 'BM',
             ],
         ];
 

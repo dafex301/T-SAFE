@@ -26,6 +26,9 @@ return new class extends Migration
             $table->boolean('pic_checked')->default(false);
             $table->timestamp('pic_checked_at')->nullable();
             $table->foreignId('pic')->nullable();
+            $table->foreignId('branch_manager')->nullable();
+            $table->boolean('branch_manager_approval')->default(false);
+            $table->timestamp('branch_manager_approval_at')->nullable();
             $table->boolean('completed')->default(false);
             $table->string('immediate_action')->nullable();
             $table->string('prevention')->nullable();
