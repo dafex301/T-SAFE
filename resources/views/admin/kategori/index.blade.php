@@ -7,7 +7,7 @@
                 <div class="col-12">
                     <div class="card mb-4">
                         <div class="card-header">
-                            <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex justify-content-between align-items-center w-100">
                                 <strong>Manajemen Kategori</strong>
                                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
                                     Buat Kategori
