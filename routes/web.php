@@ -47,6 +47,9 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         // Tindak Lanjut Routes
         Route::post('/tindaklanjut/{id}', 'LaporanController@tindaklanjut')->name('laporan.tindaklanjut');
 
+        // Approve Routes
+        Route::post('/approve/{id}', 'LaporanController@approve')->name('laporan.approve');
+
         // History Routes
         Route::get('/history', 'LaporanController@history')->name('laporan.history');
 

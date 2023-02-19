@@ -7,7 +7,8 @@
                 <div class="col-12">
                     <div class="card mb-4">
                         <div class="card-header"><strong>Verifikasi Potensi Bahaya</strong></div>
-                        <form action="/verifikasi/{{ $laporan->id }}" method="post" enctype="multipart/form-data">
+                        <form action="/verifikasi/{{ $laporan->id }}" method="post" enctype="multipart/form-data"
+                            id="verifikasi-laporan-form">
                             @csrf
                             <div class="card-body">
 
@@ -26,7 +27,8 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="verifyTanggal">Hari dan Tanggal</label>
                                             <input class="form-control" id="verifyTanggal" type="date" name="tanggal"
-                                                placeholder="" value="{{ $laporan->tanggal }}" name="tanggal" disabled>
+                                                placeholder="" value="{{ old('tanggal') ?? ($laporan->tanggal ?? '') }}"
+                                                name="tanggal" disabled>
                                             @error('tanggal')
                                                 <div class="text-danger">
                                                     {{ $message }}
@@ -36,7 +38,7 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="lokasi">Lokasi</label>
                                             <input class="form-control" id="lokasi" type="text" name="lokasi"
-                                                placeholder="" value="{{ $laporan->lokasi }}">
+                                                placeholder="" value="{{ old('lokasi') ?? ($laporan->lokasi ?? '') }}">
                                             @error('lokasi')
                                                 <div class="text-danger">
                                                     {{ $message }}
@@ -49,7 +51,10 @@
                                                 <option value="">Pilih Jenis / Kategori</option>
                                                 {{-- Foreach kategori --}}
                                                 @foreach ($kategori as $item)
-                                                    @if ($laporan->kategori == $item->id)
+                                                    @if (old('kategori') == $item->id)
+                                                        <option value="{{ $item->id }}" selected>{{ $item->name }}
+                                                        </option>
+                                                    @elseif ($laporan->kategori == $item->id)
                                                         <option value="{{ $item->id }}" selected>{{ $item->name }}
                                                         </option>
                                                     @else
@@ -67,7 +72,8 @@
                                         <div class="mb-3" id="jenis-lain-container" style="display: none">
                                             <label class="form-label" for="jenis-lain">Jenis / Kategori</label>
                                             <input class="form-control" name="kategori_lain" id="jenis-lain" type="text"
-                                                placeholder="" value="{{ $laporan->kategori_lain }}">
+                                                placeholder=""
+                                                value="{{ old('kategori_lain') ?? ($laporan->kategori_lain ?? '') }}">
                                             @error('kategori_lain')
                                                 <div class="text-danger">
                                                     {{ $message }}
@@ -77,7 +83,8 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="deskripsi">Deskripsi</label>
                                             <input class="form-control" id="deskripsi" type="text" placeholder=""
-                                                name="deskripsi" value="{{ $laporan->deskripsi }}">
+                                                name="deskripsi"
+                                                value="{{ old('deskripsi') ?? ($laporan->deskripsi ?? '') }}">
                                             @error('deskripsi')
                                                 <div class="text-danger">
                                                     {{ $message }}
@@ -99,13 +106,15 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="immediate_action">Immediate Action</label>
                                             <input class="form-control" id="immediate_action" name="immediate_action"
-                                                type="text" placeholder="" value="{{ old('immediate_action') }}">
+                                                type="text" placeholder=""
+                                                value="{{ old('immediate_action') ?? ($laporan->immediate_action ?? '') }}">
                                             <div class="text-danger" id="immediate_action-error"></div>
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="prevention">Pencegahan / Perbaikan</label>
                                             <input class="form-control" id="prevention" name="prevention" type="text"
-                                                placeholder="" value="{{ old('prevention') }}">
+                                                placeholder=""
+                                                value="{{ old('prevention') ?? ($laporan->prevention ?? '') }}">
                                             <div class="text-danger" id="prevention-error"></div>
                                         </div>
 
@@ -118,12 +127,15 @@
                                             <div class="text-danger" id="completed_image-error"></div>
                                         </div>
 
-                                        <button type="submit" hidden id="tutup-laporan-submit">Tutup Laporan</button>
+                                        <button type="submit" hidden id="verifikasi-laporan-submit">Tutup
+                                            Laporan</button>
                                         <div class="mb-3 mt-4">
                                             <button class="btn btn-success " type="button" data-bs-toggle="modal"
                                                 data-bs-target="#tutupModal">Tutup Laporan</button>
-                                            <button class="btn btn-warning " type="button" data-bs-toggle="modal"
-                                                data-bs-target="#tindakModal">Tindak Lanjut</button>
+                                            @if (auth()->user()->Role->name === 'PIC')
+                                                <button class="btn btn-warning " type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#tindakModal">Tindak Lanjut</button>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -178,14 +190,46 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <form action="">
-                        @csrf
-
-                        <button type="submit" class="btn btn-warning">Tindak Lanjut</button>
-                    </form>
+                    <button type="button" class="btn btn-warning" id="tindak-lanjut">Tindak Lanjut</button>
                 </div>
             </div>
         </div>
     </div>
     <!-- End of Tindaklanjuti Modal -->
+
+    {{-- Script --}}
+    <script defer>
+        // Tutup Laporan Validation
+        $('#tutup-laporan').click(function() {
+            if ($('#immediate_action').val() == '') {
+                $('#immediate_action-error').html('Harap isi immediate action');
+            } else {
+                $('#immediate_action-error').html('');
+            }
+            if ($('#prevention').val() == '') {
+                $('#prevention-error').html('Harap isi langkah pencegahan');
+            } else {
+                $('#prevention-error').html('');
+            }
+            if ($('#completed_image').val() == '') {
+                $('#completed_image-error').html('Harap masukkan dokumentasi');
+            } else {
+                $('#completed_image-error').html('');
+            }
+            if ($('#immediate_action').val() != '' && $('#prevention').val() != '' && $('#completed_image').val() !=
+                '') {
+                $('#verifikasi-laporan-submit').click();
+            }
+            $('#cancelModal').click();
+        });
+
+        $('#tindak-lanjut').click(function() {
+            $('#verifikasi-laporan-form').attr('action',
+                "{{ route('laporan.tindaklanjut', $laporan->id) }}");
+            $('#verifikasi-laporan-submit').click();
+            $('#cancelModal').click();
+        });
+    </script>
+
+    {{-- Script --}}
 @endsection

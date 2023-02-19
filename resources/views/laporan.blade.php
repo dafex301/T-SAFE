@@ -26,6 +26,10 @@
                                                     @else
                                                         <th scope="col">Pelapor</th>
                                                     @endif
+                                                    @if (auth()->user()->Role->name === 'BM')
+                                                        <th>Immediate Action</th>
+                                                        <th>Perbaikan</th>
+                                                    @endif
                                                     <th scope="col">Aksi</th>
                                                 </tr>
                                             </thead>
@@ -57,6 +61,10 @@
                                                         @else
                                                             <td>{{ $l->Pelapor->name }}</td>
                                                         @endif
+                                                        @if (auth()->user()->Role->name === 'BM')
+                                                            <td>{{ $l->immediate_action ?? '-' }}</td>
+                                                            <td>{{ $l->prevention ?? '-' }}</td>
+                                                        @endif
                                                         <td>
                                                             <button type="button" class="btn btn-outline-primary"
                                                                 data-bs-toggle="modal" data-bs-target="#imageModal"
@@ -68,7 +76,22 @@
                                                                         d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                                                                 </svg>
                                                             </button>
-                                                            @if (auth()->user()->Role->name !== 'Staff')
+                                                            @if (auth()->user()->Role->name === 'BM')
+                                                                <button type="button" class="btn btn-outline-success"
+                                                                    data-bs-toggle="modal" data-bs-target="#approveModal"
+                                                                    data-id="{{ $l->id }}"
+                                                                    data-deskripsi="{{ $l->deskripsi }}"
+                                                                    data-lokasi="{{ $l->lokasi }}"
+                                                                    data-tanggal="{{ $l->tanggal }}">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                        viewBox="0 0 24 24" stroke-width="1.5"
+                                                                        stroke="currentColor" style="height: 20px;">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                                            d="M4.5 12.75l6 6 9-13.5" />
+                                                                    </svg>
+
+                                                                </button>
+                                                            @elseif (auth()->user()->Role->name !== 'Staff')
                                                                 <a href="/verifikasi/{{ $l->id }}"
                                                                     class="btn btn-outline-success">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -113,23 +136,57 @@
     </div>
     <!-- End of Image Modal -->
 
-    <!-- Delete Modal -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <!-- Approve Modal -->
+    <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="deleteModalLabel">Modal title</h1>
+                    <h1 class="modal-title fs-5" id="approveModalLabel">Approve Laporan</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <p>Apakah anda yakin untuk me-reject laporan ini?</p>
+                <div class="modal-body d-flex flex-column justify-content-center align-items-center">
+                    <img src="{{ url('assets/img/accept.jpeg') }}" alt="Approve" srcset=""
+                        class="img-fluid w-25 mb-2">
+                    <h5 class="text-center">Apakah anda yakin untuk <i>approve</i> laporan ini?</h5>
+                    <div id="approve-text"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-danger">Save changes</button>
+                    <form action="" method="POST" id="approve-laporan-form">
+                        @csrf
+                        <button type="submit" class="btn btn-success">Approve</button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-    <!-- End of Delete Modal -->
+    <!-- End of Approve Modal -->
+
+
+    {{-- Approve Modal Script --}}
+    <script>
+        $('#approveModal').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget) // Button that triggered the modal
+
+            // Extract info from data-* attributes
+            var id = button.data('id')
+            var deskripsi = button.data('deskripsi')
+            var lokasi = button.data('lokasi')
+            var tanggal = button.data('tanggal')
+
+            // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+            // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+            var modal = $(this)
+
+            // Create a h6 for every deskripsi, lokasi, and tanggal in div approve-text id and clear it first
+            $('#approve-text').empty()
+            $('#approve-text').append('<h6 class="text-center">Deskripsi: ' + deskripsi + '</h6>')
+            $('#approve-text').append('<h6 class="text-center">Lokasi: ' + lokasi + '</h6>')
+            $('#approve-text').append('<h6 class="text-center">Tanggal: ' + tanggal + '</h6>')
+
+            // Set the action of approve-laporan-form to /approve/{id}
+            $('#approve-laporan-form').attr('action', '/approve/' + id)
+        })
+    </script>
+    {{-- End of Approve Modal Script --}}
 @endsection

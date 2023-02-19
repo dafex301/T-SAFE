@@ -94,8 +94,8 @@ class LaporanController extends Controller
             'tanggal' => $request->tanggal,
             'lokasi' => $request->lokasi,
             'kategori' => $request->kategori,
-            'is_kategori_lain' => $request->kategori == 6 ? true : false,
-            'kategori_lain' => $request->kategori == 6 ? $request->kategori_lain : null,
+            'is_kategori_lain' => $request->kategori == 999 ? true : false,
+            'kategori_lain' => $request->kategori == 999 ? $request->kategori_lain : null,
             'deskripsi' => $request->deskripsi,
             'image' => $filePath,
         ]);
@@ -167,9 +167,13 @@ class LaporanController extends Controller
         $laporan->deskripsi = $request->deskripsi;
         $laporan->immediate_action = $request->immediate_action;
         $laporan->prevention = $request->prevention;
-        $laporan->pic = auth()->user()->id;
-        $laporan->pic_checked = true;
-        $laporan->pic_checked_at = now();
+
+        if (auth()->user()->Role->name === 'PIC') {
+            $laporan->pic = auth()->user()->id;
+            $laporan->pic_checked = true;
+            $laporan->pic_checked_at = now();
+        }
+
         $laporan->completed = true;
         $laporan->completed_at = now();
         $laporan->completed_by = auth()->user()->id;
@@ -193,16 +197,17 @@ class LaporanController extends Controller
             'lokasi' => 'required|string',
             'kategori' => 'required',
             'deskripsi' => 'required|string',
-            'immediate_action' => 'string',
-            'prevention' => 'string',
+            'immediate_action' => 'nullable|string',
+            'prevention' => 'nullable|string',
         ]);
 
-        // Check if kategori is 6 (Lain-lain)
-        if ($request->kategori == 6) {
+        // Check if kategori is 999 (Lain-lain)
+        if ($request->kategori == 999) {
             $this->validate($request, [
                 'kategori_lain' => 'required|string',
             ]);
         }
+
 
         $laporan = Laporan::find($id);
         $laporan->lokasi = $request->lokasi;
@@ -219,6 +224,18 @@ class LaporanController extends Controller
         $laporan->save();
 
         return redirect()->route('laporan.index')->with('success', 'Laporan berhasil ditindaklanjuti!');
+    }
+
+    public function approve(String $id)
+    {
+        $laporan = Laporan::find($id);
+        $laporan->branch_manager = auth()->user()->id;
+        $laporan->branch_manager_approval = true;
+        $laporan->branch_manager_approval_at = now();
+
+        $laporan->save();
+
+        return redirect()->route('laporan.index')->with('success', 'Laporan berhasil diapprove!');
     }
 
 

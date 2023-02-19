@@ -287,32 +287,6 @@
             }
             reader.readAsDataURL(file);
         });
-
-        // VALIDATION
-        // Tutup Laporan Validation
-        $('#tutup-laporan').click(function() {
-            if ($('#immediate_action').val() == '') {
-                $('#immediate_action-error').html('Harap isi immediate action');
-            } else {
-                $('#immediate_action-error').html('');
-            }
-            if ($('#prevention').val() == '') {
-                $('#prevention-error').html('Harap isi langkah pencegahan');
-            } else {
-                $('#prevention-error').html('');
-            }
-            if ($('#completed_image').val() == '') {
-                $('#completed_image-error').html('Harap masukkan dokumentasi');
-            } else {
-                $('#completed_image-error').html('');
-            }
-            if ($('#immediate_action').val() != '' && $('#prevention').val() != '' && $('#completed_image').val() !=
-                '') {
-                $('#tutup-laporan-submit').click();
-            }
-            // Click the cancelModal
-            $('#cancelModal').click();
-        });
     </script>
 
     <!-- Upload Preview -->

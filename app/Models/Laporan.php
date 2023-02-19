@@ -53,6 +53,12 @@ class Laporan extends Model
         return $this->belongsTo(User::class, 'pic');
     }
 
+    // Branch Manager
+    public function BM()
+    {
+        return $this->belongsTo(User::class, 'branch_manager');
+    }
+
     // Completed by
     public function completed_by()
     {
