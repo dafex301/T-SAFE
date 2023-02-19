@@ -32,6 +32,7 @@ class KategoriSeeder extends Seeder
                 'name' => 'Psikososial',
             ],
             [
+                'id' => 999,
                 'name' => 'Lain-lain',
             ],
         ];

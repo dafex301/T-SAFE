@@ -62,12 +62,6 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::put('/admin/akun/{id}', 'UserController@update')->name('user.update');
         Route::delete('/admin/akun/{id}', 'UserController@destroy')->name('user.destroy');
 
-        // Role Routes
-        Route::get('/admin/role', 'RoleController@index')->name('role.index');
-        Route::post('/admin/role', 'RoleController@store')->name('role.store');
-        Route::put('/admin/role/{id}', 'RoleController@update')->name('role.update');
-        Route::delete('/admin/role/{id}', 'RoleController@destroy')->name('role.destroy');
-
         // Kategori Routes
         Route::get('/admin/kategori', 'KategoriController@index')->name('kategori.index');
         Route::post('/admin/kategori', 'KategoriController@store')->name('kategori.store');

@@ -23,7 +23,13 @@ class Laporan extends Model
         'pic_checked',
         'pic_checked_at',
         'pic',
+        'branch_manager',
+        'branch_manager_approval',
+        'branch_manager_approval_at',
+        'immediate_action',
+        'prevention',
         'completed',
+        'completed_image',
         'completed_at',
         'completed_by',
     ];

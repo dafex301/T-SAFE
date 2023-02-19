@@ -20,6 +20,17 @@ class UserSeeder extends Seeder
             'role' => 1,
             'username' => 'admin',
         ]);
+
+        User::factory()->create([
+            'role' => 2,
+            'username' => 'staff1',
+        ]);
+
+        User::factory()->create([
+            'role' => 2,
+            'username' => 'staff2',
+        ]);
+
         User::factory()->create([
             'role' => 3,
             'username' => 'pic',

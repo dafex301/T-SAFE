@@ -21,9 +21,10 @@
                                                     <th scope="col">Hari, Tanggal</th>
                                                     <th scope="col">Lokasi</th>
                                                     <th scope="col">Kategori</th>
-                                                    <th scope="col">Pelapor</th>
-                                                    @if (auth()->user()->Role == 'Staff')
+                                                    @if (auth()->user()->Role->name == 'Staff')
                                                         <th scope="col">Status</th>
+                                                    @else
+                                                        <th scope="col">Pelapor</th>
                                                     @endif
                                                     <th scope="col">Aksi</th>
                                                 </tr>
@@ -40,18 +41,21 @@
                                                         <td>{{ $l->lokasi }}</td>
                                                         <td>{{ $l->Kategori->name == 'Lain-lain' ? $l->kategori_lain : $l->Kategori->name }}
                                                         </td>
-                                                        <td>{{ $l->Pelapor->name }}</td>
-                                                        @if (auth()->user()->Role == 'Staff')
+                                                        @if (auth()->user()->Role->name == 'Staff')
                                                             <td>
                                                                 @if ($l->completed)
                                                                     <span class="badge text-bg-success">Selesai</span>
+                                                                @elseif ($l->branch_manager_approval)
+                                                                    <span class="badge text-bg-info">Diproses DPnP</span>
                                                                 @elseif ($l->pic_checked)
-                                                                    <span class="badge text-bg-info">Diproses DPP</span>
+                                                                    <span class="badge text-bg-info">Diproses BM</span>
                                                                 @else
                                                                     <span class="badge text-bg-secondary">Diproses
                                                                         PIC</span>
                                                                 @endif
                                                             </td>
+                                                        @else
+                                                            <td>{{ $l->Pelapor->name }}</td>
                                                         @endif
                                                         <td>
                                                             <button type="button" class="btn btn-outline-primary"

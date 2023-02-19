@@ -216,10 +216,6 @@ class LaporanController extends Controller
         $laporan->pic_checked = true;
         $laporan->pic_checked_at = now();
 
-
-
-
-
         $laporan->save();
 
         return redirect()->route('laporan.index')->with('success', 'Laporan berhasil ditindaklanjuti!');

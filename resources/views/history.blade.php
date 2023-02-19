@@ -43,10 +43,12 @@
                                                     <td>
                                                         @if ($l->completed)
                                                             <span class="badge text-bg-success">Selesai</span>
+                                                        @elseif ($l->branch_manager_approval)
+                                                            <span class="badge text-bg-info">Diproses DPnP</span>
                                                         @elseif ($l->pic_checked)
-                                                            <span class="badge text-bg-success">Diproses DPP</span>
+                                                            <span class="badge text-bg-info">Diproses BM</span>
                                                         @else
-                                                            <span class="badge text-bg-success">Diproses PIC</span>
+                                                            <span class="badge text-bg-secondary">Diproses PIC</span>
                                                         @endif
                                                     </td>
                                                     <td>
