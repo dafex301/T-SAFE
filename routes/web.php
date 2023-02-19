@@ -34,11 +34,15 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::get('/lapor', 'LaporanController@create')->name('lapor.create');
         Route::post('/lapor', 'LaporanController@store')->name('lapor.store');
 
-        // Verifikasi Laporan Routes
-        Route::get('/lapor/[id]', 'VerifikasiLaporanController@show')->name('laporan.show');
-
         // Laporan Routes
         Route::get('/laporan', 'LaporanController@index')->name('laporan.index');
+
+        // History Routes
+        Route::get('/history', 'LaporanController@history')->name('laporan.history');
+
+        // Verifikasi Laporan Routes
+        Route::get('/verifikasi/{id}', 'LaporanController@show')->name('laporan.show');
+        Route::post('/verifikasi/{id}', 'LaporanController@verifikasi')->name('laporan.verifikasi');
 
         // History Routes
         Route::get('/history', 'LaporanController@history')->name('laporan.history');

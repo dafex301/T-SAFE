@@ -75,11 +75,11 @@
                                             @enderror
                                         </div>
                                         <div class="mb-3">
-                                            <label class="form-label" for="dokumentasi">Dokumentasi</label>
+                                            <label class="form-label" for="image">Dokumentasi</label>
                                             <div class="img-container mb-2"></div>
                                             <input type="file" id="dokumentasi" class="form-control" accept="image/*"
-                                                capture="camera" value="{{ old('dokumentasi') }}" name="dokumentasi">
-                                            @error('dokumentasi')
+                                                capture="camera" value="{{ old('image') }}" name="image">
+                                            @error('image')
                                                 <div class="text-danger">
                                                     {{ $message }}
                                                 </div>
@@ -98,4 +98,7 @@
             </div>
         </div>
     </div>
+    <script defer>
+        document.getElementById('inputTanggal').valueAsDate = new Date();
+    </script>
 @endsection

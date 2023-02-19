@@ -15,6 +15,23 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
+
+        User::factory()->create([
+            'role' => 1,
+            'username' => 'admin',
+        ]);
+        User::factory()->create([
+            'role' => 3,
+            'username' => 'pic',
+        ]);
+
+        User::factory()->create([
+            'role' => 4,
+            'username' => 'dpp',
+        ]);
+
+
+
         User::factory()->count(5)->create();
     }
 }

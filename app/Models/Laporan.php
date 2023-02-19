@@ -19,7 +19,7 @@ class Laporan extends Model
         'is_kategori_lain',
         'kategori_lain',
         'deskripsi',
-        'dokumentasi',
+        'image',
         'pic_checked',
         'pic_checked_at',
         'pic',

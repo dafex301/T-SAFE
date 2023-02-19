@@ -16,9 +16,33 @@ class LaporanController extends Controller
      */
     public function index()
     {
+        $role = auth()->user()->Role->name;
+
+        $laporan = null;
+
+        if ($role == 'Admin') {
+            $laporan = Laporan::where('completed', false)->get();
+        } else if ($role == 'Staff') {
+            $laporan = Laporan::where('pelapor', auth()->user()->id)->get();
+        } else if ($role == 'PIC') {
+            $laporan = Laporan::where('pic_checked', false)->get();
+        } else if ($role == 'DPP') {
+            $laporan = Laporan::where('pic_checked', true)->where('completed', false)->get();
+        }
+
         return view('laporan', [
+            'laporan' => $laporan,
+        ]);
+    }
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function history()
+    {
+        return view('history', [
             'laporan' => Laporan::all(),
-            'kategori' => Kategori::all(),
         ]);
     }
 
@@ -48,7 +72,7 @@ class LaporanController extends Controller
             'lokasi' => 'required|string',
             'kategori' => 'required',
             'deskripsi' => 'required|string',
-            'dokumentasi' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
         // Check if kategori is 6 (Lain-lain)
@@ -59,8 +83,8 @@ class LaporanController extends Controller
         }
 
         // Change the filename to current timestamp_lokasi_user.name before store to db
-        $filePath = $request->file('dokumentasi')
-            ->storeAs('dokumentasi', time() . '_' . $request->lokasi . '_' . auth()->user()->name . '.' . $request->dokumentasi->extension(), 'public');
+        $filePath = $request->file('image')
+            ->storeAs('image', time() . '_' . $request->lokasi . '_' . auth()->user()->name . '.' . $request->image->extension(), 'public');
 
         // Create new Laporan
         $laporan = Laporan::create([
@@ -71,7 +95,7 @@ class LaporanController extends Controller
             'is_kategori_lain' => $request->kategori == 6 ? true : false,
             'kategori_lain' => $request->kategori == 6 ? $request->kategori_lain : null,
             'deskripsi' => $request->deskripsi,
-            'dokumentasi' => $filePath,
+            'image' => $filePath,
         ]);
 
         return redirect()->route('laporan.index')->with('success', 'Laporan berhasil dibuat!');
@@ -83,9 +107,64 @@ class LaporanController extends Controller
      * @param  \App\Models\Laporan  $laporan
      * @return \Illuminate\Http\Response
      */
-    public function show(Laporan $laporan)
+    public function show(String $id)
     {
-        //
+        $laporan = Laporan::find($id);
+        return view('verifikasi', [
+            'laporan' => $laporan,
+            'kategori' => Kategori::all()
+        ]);
+    }
+
+    /**
+     * Verify the specified resource in storage.
+     *
+     * @param  \App\Http\Requests\UpdateLaporanRequest  $request
+     * @param  \App\Models\Laporan  $laporan
+     * @return \Illuminate\Http\Response
+     */
+    public function verifikasi(UpdateLaporanRequest $request, String $id)
+    {
+        $this->validate($request, [
+            'lokasi' => 'required|string',
+            'kategori' => 'required',
+            'deskripsi' => 'required|string',
+            'immediate_action' => 'required|string',
+            'prevention' => 'required|string',
+            'completed_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+
+        // Check if kategori is 6 (Lain-lain)
+        if ($request->kategori == 6) {
+            $this->validate($request, [
+                'kategori_lain' => 'required|string',
+            ]);
+        }
+
+        // Change the filename to current timestamp_lokasi_user.name before store to db
+        $filePath = $request->file('completed_image')
+            ->storeAs('completed_image', time() . '_' . $request->lokasi . '_' . auth()->user()->name . '.' . $request->completed_image->extension(), 'public');
+
+        // Create new Laporan
+        $laporan = Laporan::find($id);
+        $laporan->lokasi = $request->lokasi;
+        $laporan->kategori = $request->kategori;
+        $laporan->is_kategori_lain = $request->kategori == 6 ? true : false;
+        $laporan->kategori_lain = $request->kategori == 6 ? $request->kategori_lain : null;
+        $laporan->deskripsi = $request->deskripsi;
+        $laporan->immediate_action = $request->immediate_action;
+        $laporan->prevention = $request->prevention;
+        $laporan->pic = auth()->user()->id;
+        $laporan->pic_checked = true;
+        $laporan->pic_checked_at = now();
+        $laporan->completed = true;
+        $laporan->completed_at = now();
+        $laporan->completed_by = auth()->user()->id;
+        $laporan->completed_image = $filePath;
+
+        $laporan->save();
+
+        return redirect()->route('laporan.index')->with('success', 'Laporan berhasil diubah!');
     }
 
     /**
