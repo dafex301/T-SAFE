@@ -26,15 +26,6 @@
     <link href="{{ url('css/examples.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url('css/dataTables.bootstrap5.min.css') }}">
 
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.4/css/buttons.dataTables.min.css">
-
-    {{-- DataTables --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.2/css/dataTables.bulma.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.4/css/buttons.bulma.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
     <!-- Global site tag (gtag.js) - Google Analytics-->
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
     <!-- Bootstrap CDN -->
@@ -65,21 +56,6 @@
     <!-- jQuery -->
     <script src="{{ url('https://code.jquery.com/jquery-3.6.3.slim.min.js') }}"
         integrity="sha256-ZwqZIVdD3iXNyGHbSYdsmWP//UBokj2FHAxKuSBKDSo=" crossorigin="anonymous"></script>
-
-    {{-- DataTables --}}
-    <script defer src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
-    <script defer src="https://cdn.datatables.net/1.13.2/js/dataTables.bulma.min.js"></script>
-    <script defer src="https://cdn.datatables.net/buttons/2.3.4/js/dataTables.buttons.min.js"></script>
-    <script defer src="https://cdn.datatables.net/buttons/2.3.4/js/buttons.bulma.min.js"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script defer src="https://cdn.datatables.net/buttons/2.3.4/js/buttons.html5.min.js"></script>
-    <script defer src="https://cdn.datatables.net/buttons/2.3.4/js/buttons.print.min.js"></script>
-    <script defer src="https://cdn.datatables.net/buttons/2.3.4/js/buttons.colVis.min.js"></script>
-
-
-
 </head>
 
 <body>
@@ -252,15 +228,7 @@
     <script src="{{ url('js/dataTables.bootstrap5.min.js') }}"></script>
     <script>
         $(document).ready(function() {
-            var table = $('#myTable').DataTable({
-                lengthChange: false,
-                buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
-            });
-
-            table.buttons().container()
-                .appendTo($('div.column.is-half', table.table().container()).eq(0));
+            $('#myTable').DataTable();
         });
     </script>
 
