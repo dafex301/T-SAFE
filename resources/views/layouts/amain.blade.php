@@ -24,21 +24,11 @@
     <!-- We use those styles to show code examples, you should remove them in your application.-->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism.css">
     <link href="{{ url('css/examples.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url('css/dataTables.bootstrap5.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ url('css/dataTables.bootstrap5.min.css') }}"> --}}
 
     <!-- Global site tag (gtag.js) - Google Analytics-->
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
-    {{-- DataTables Stylesheet --}}
-    <link rel="stylesheet" href="{{ url('css/datatables/jquery.dataTables.min.css') }}">
-    <link rel="stylesheet" href="{{ url('css/datatables/buttons.dataTables.min.css') }}">
-    <link rel="stylesheet" href="{{ url('css/datatables/bulma.min.css') }}">
-    <link rel="stylesheet" href="{{ url('css/datatables/dataTables.bulma.min.css') }}">
-    <link rel="stylesheet" href="{{ url('css/datatables/buttons.bulma.min.css') }}">
-    <link rel="stylesheet" href="{{ url('css/datatables/font-awesome.min.css') }}">
-    <!-- Bootstrap CDN -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-    <script>
+    < <script>
         window.dataLayer = window.dataLayer || [];
 
         function gtag() {
@@ -52,12 +42,31 @@
     </script>
     <link href="{{ url('vendors/@coreui/chartjs/css/coreui-chartjs.css') }}" rel="stylesheet">
 
-    {{-- Script Defer --}}
+
+    {{-- DataTables Stylesheet --}}
+    <link rel="stylesheet" href="{{ url('css/datatables/jquery.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ url('css/datatables/buttons.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ url('css/datatables/bulma.min.css') }}">
+    <link rel="stylesheet" href="{{ url('css/datatables/dataTables.bulma.min.css') }}">
+    <link rel="stylesheet" href="{{ url('css/datatables/buttons.bulma.min.css') }}">
+    <link rel="stylesheet" href="{{ url('css/datatables/font-awesome.min.css') }}">
+
     <!-- Bootstrap CDN -->
-    <script src="{{ url('js/bootstrap.min.js') }}"></script>
-    <script src="{{ url('js/bootstrap.bundle.min.js') }}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+
+    <!-- Bootstrap CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
+    </script>
     <!-- jQuery -->
-    <script src="{{ url('js/jquery-3.6.3.slim.min.js') }}"></script>
+    <script src="{{ url('https://code.jquery.com/jquery-3.6.3.slim.min.js') }}"
+        integrity="sha256-ZwqZIVdD3iXNyGHbSYdsmWP//UBokj2FHAxKuSBKDSo=" crossorigin="anonymous"></script>
+
 </head>
 
 <body>
@@ -216,6 +225,9 @@
     {{-- Scripts --}}
 
 
+
+
+
     <!-- CoreUI and necessary plugins-->
     <script src="{{ url('vendors/@coreui/coreui/js/coreui.bundle.min.js') }}"></script>
     <script src="{{ url('vendors/simplebar/js/simplebar.min.js') }}"></script>
@@ -224,6 +236,7 @@
     <script src="{{ url('vendors/@coreui/chartjs/js/coreui-chartjs.js') }}"></script>
     <script src="{{ url('vendors/@coreui/utils/js/coreui-utils.js') }}"></script>
     <script src="{{ url('js/main.js') }}"></script>
+
 
     <!-- DataTables -->
     <script src="{{ url('js/datatables.min.js') }}"></script>

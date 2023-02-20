@@ -22,22 +22,16 @@
     <!-- Main styles for this application-->
     <link href="{{ url('css/style.css') }}" rel="stylesheet">
     <!-- We use those styles to show code examples, you should remove them in your application.-->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.23.0/themes/prism.css">
+    <link rel="stylesheet" href="{{ url('/css/prism.css') }}">
     <link href="{{ url('css/examples.css') }}" rel="stylesheet">
+
     <link rel="stylesheet" href="{{ url('css/dataTables.bootstrap5.min.css') }}">
+
 
     <!-- Global site tag (gtag.js) - Google Analytics-->
     <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
-    {{-- DataTables Stylesheet --}}
-    <link rel="stylesheet" href="{{ url('css/datatables/jquery.dataTables.min.css') }}">
-    <link rel="stylesheet" href="{{ url('css/datatables/buttons.dataTables.min.css') }}">
-    <link rel="stylesheet" href="{{ url('css/datatables/bulma.min.css') }}">
-    <link rel="stylesheet" href="{{ url('css/datatables/dataTables.bulma.min.css') }}">
-    <link rel="stylesheet" href="{{ url('css/datatables/buttons.bulma.min.css') }}">
-    <link rel="stylesheet" href="{{ url('css/datatables/font-awesome.min.css') }}">
-    <!-- Bootstrap CDN -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
-        integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+
+
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -52,12 +46,27 @@
     </script>
     <link href="{{ url('vendors/@coreui/chartjs/css/coreui-chartjs.css') }}" rel="stylesheet">
 
-    {{-- Script Defer --}}
+
+    {{-- DataTables Stylesheet --}}
+    <link rel="stylesheet" href="{{ url('css/datatables/jquery.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ url('css/datatables/buttons.dataTables.min.css') }}">
+    <link rel="stylesheet" href="{{ url('css/datatables/bulma.min.css') }}">
+    <link rel="stylesheet" href="{{ url('css/datatables/dataTables.bulma.min.css') }}">
+    <link rel="stylesheet" href="{{ url('css/datatables/buttons.bulma.min.css') }}">
+    <link rel="stylesheet" href="{{ url('css/datatables/font-awesome.min.css') }}">
+
+    <!-- Bootstrap Stylesheet -->
+    <link rel="stylesheet" href="{{ url('/datatables/css/font-awesome.min.css') }}">
+
+
+    {{-- Scripts --}}
+
     <!-- Bootstrap CDN -->
     <script src="{{ url('js/bootstrap.min.js') }}"></script>
     <script src="{{ url('js/bootstrap.bundle.min.js') }}"></script>
     <!-- jQuery -->
     <script src="{{ url('js/jquery-3.6.3.slim.min.js') }}"></script>
+
 </head>
 
 <body>
@@ -207,13 +216,34 @@
         {{-- Footer --}}
         <footer class="footer">
             <div>Footer</div>
-            <div class="ms-auto">Footer Kanan</div>
+            <div class="ms-auto">Footer Right</div>
         </footer>
         {{-- End of Footer --}}
 
     </div>
 
-    {{-- Scripts --}}
+
+
+
+    {{-- <script src="{{ url('js/dataTables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url('js/dataTables/dataTables.buttons.min.js') }}"></script>
+    <script src="{{ url('js/dataTables/buttons.bulma.min.js') }}"></script>
+    <script src="{{ url('js/dataTables/jszip.min.js') }}"></script>
+    <script src="{{ url('js/dataTables/pdfmake.min.js') }}"></script>
+    <script src="{{ url('js/dataTables/vfs_fonts.js') }}"></script>
+    <script src="{{ url('js/dataTables/buttons.html5.min.js`') }}"></script>
+    <script src="{{ url('js/dataTables/buttons.print.min.js`') }}"></script>
+    <script src="{{ url('js/dataTables/buttons.colVis.min.js`') }}"></script> --}}
+
+    <script defer src="https://cdn.datatables.net/1.13.2/js/dataTables.bulma.min.js"></script>
+    <script defer src="https://cdn.datatables.net/buttons/2.3.4/js/dataTables.buttons.min.js"></script>
+    <script defer src="https://cdn.datatables.net/buttons/2.3.4/js/buttons.bulma.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script defer src="https://cdn.datatables.net/buttons/2.3.4/js/buttons.html5.min.js"></script>
+    <script defer src="https://cdn.datatables.net/buttons/2.3.4/js/buttons.print.min.js"></script>
+    <script defer src="https://cdn.datatables.net/buttons/2.3.4/js/buttons.colVis.min.js"></script>
 
 
     <!-- CoreUI and necessary plugins-->
@@ -227,22 +257,13 @@
 
     <!-- DataTables -->
     <script src="{{ url('js/datatables.min.js') }}"></script>
-    <script src="{{ url('js/datatables/dataTables.bulma.min.js') }}"></script>
-    <script src="{{ url('js/datatables/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ url('js/datatables/buttons.bulma.min.js') }}"></script>
-    <script src="{{ url('js/datatables/jszip.min.js') }}"></script>
-    {{-- <script src="{{ url('js/datatables/pdfmake.min.js') }}"></script> --}}
-    {{-- <script src="{{ url('js/datatables/vfs_fonts.js') }}"></script> --}}
-    <script src="{{ url('js/datatables/buttons.html5.min.js') }}"></script>
-    <script src="{{ url('js/datatables/buttons.print.min.js') }}"></script>
-    <script src="{{ url('js/datatables/buttons.colVis.min.js') }}"></script>
-
+    <script src="{{ url('js/dataTables.bootstrap5.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             var table = $('#myTable').DataTable({
                 lengthChange: false,
                 buttons: [
-                    'copy', 'csv', 'excel', 'print'
+                    'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
             });
 
