@@ -19,7 +19,6 @@ return new class extends Migration
             $table->date('tanggal');
             $table->string('lokasi');
             $table->foreignId('kategori');
-            $table->boolean('is_kategori_lain')->default(false);
             $table->string('kategori_lain')->nullable();
             $table->string('deskripsi');
             $table->string('image');

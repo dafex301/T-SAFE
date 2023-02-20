@@ -36,7 +36,11 @@
                                                         {{ $l->created_at->format('d M Y') }}
                                                     </td>
                                                     <td>{{ $l->lokasi }}</td>
-                                                    <td>{{ $l->Kategori->name }}</td>
+                                                    @if ($l->kategori !== 0)
+                                                        <td>{{ $l->Kategori->name }}</td>
+                                                    @else
+                                                        <td>{{ $l->kategori_lain }}</td>
+                                                    @endif
                                                     <td>{{ $l->Pelapor->name }}</td>
                                                     <td>{{ $l->immediate_action ?? '-' }}</td>
                                                     <td>{{ $l->prevention ?? '-' }}</td>

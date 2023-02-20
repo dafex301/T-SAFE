@@ -16,7 +16,6 @@ class Laporan extends Model
         'tanggal',
         'lokasi',
         'kategori',
-        'is_kategori_lain',
         'kategori_lain',
         'deskripsi',
         'image',
@@ -32,6 +31,7 @@ class Laporan extends Model
         'completed_image',
         'completed_at',
         'completed_by',
+        'created_at',
     ];
 
     // Relation with Kategori

@@ -267,7 +267,7 @@
     <!-- Input Form -->
     <script>
         // Jenis Lain Input
-        if ($('#jenis').val() == 999) {
+        if ($('#jenis').val() == 0) {
             $('#jenis-lain-container').show();
         } else {
             $('#jenis-lain-container').hide();
@@ -275,7 +275,7 @@
 
         $('#jenis').change(function() {
             console.log(($(this).val()));
-            if ($(this).val() == 999) {
+            if ($(this).val() == 0) {
                 $('#jenis-lain-container').show();
             } else {
                 $('#jenis-lain-container').hide();

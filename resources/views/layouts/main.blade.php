@@ -52,12 +52,22 @@
     </script>
     <link href="{{ url('vendors/@coreui/chartjs/css/coreui-chartjs.css') }}" rel="stylesheet">
 
+
     {{-- Script Defer --}}
     <!-- Bootstrap CDN -->
     <script src="{{ url('js/bootstrap.min.js') }}"></script>
     <script src="{{ url('js/bootstrap.bundle.min.js') }}"></script>
     <!-- jQuery -->
     <script src="{{ url('js/jquery-3.6.3.slim.min.js') }}"></script>
+
+    <!-- CoreUI and necessary plugins-->
+    <script src="{{ url('vendors/@coreui/coreui/js/coreui.bundle.min.js') }}"></script>
+    <script src="{{ url('vendors/simplebar/js/simplebar.min.js') }}"></script>
+    <!-- Plugins and scripts required by this view-->
+    <script src="{{ url('vendors/chart.js/js/chart.min.js') }}"></script>
+    <script src="{{ url('vendors/@coreui/chartjs/js/coreui-chartjs.js') }}"></script>
+    <script src="{{ url('vendors/@coreui/utils/js/coreui-utils.js') }}"></script>
+    {{-- <script src="{{ url('js/main.js') }}"></script> --}}
 </head>
 
 <body>
@@ -216,14 +226,7 @@
     {{-- Scripts --}}
 
 
-    <!-- CoreUI and necessary plugins-->
-    <script src="{{ url('vendors/@coreui/coreui/js/coreui.bundle.min.js') }}"></script>
-    <script src="{{ url('vendors/simplebar/js/simplebar.min.js') }}"></script>
-    <!-- Plugins and scripts required by this view-->
-    <script src="{{ url('vendors/chart.js/js/chart.min.js') }}"></script>
-    <script src="{{ url('vendors/@coreui/chartjs/js/coreui-chartjs.js') }}"></script>
-    <script src="{{ url('vendors/@coreui/utils/js/coreui-utils.js') }}"></script>
-    <script src="{{ url('js/main.js') }}"></script>
+
 
     <!-- DataTables -->
     <script src="{{ url('js/datatables.min.js') }}"></script>
@@ -254,7 +257,7 @@
     <!-- Input Form -->
     <script>
         // Jenis Lain Input
-        if ($('#jenis').val() == 999) {
+        if ($('#jenis').val() == 0) {
             $('#jenis-lain-container').show();
         } else {
             $('#jenis-lain-container').hide();
@@ -262,7 +265,7 @@
 
         $('#jenis').change(function() {
             console.log(($(this).val()));
-            if ($(this).val() == 999) {
+            if ($(this).val() == 0) {
                 $('#jenis-lain-container').show();
             } else {
                 $('#jenis-lain-container').hide();

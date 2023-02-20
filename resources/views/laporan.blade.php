@@ -43,8 +43,12 @@
                                                         </td>
 
                                                         <td>{{ $l->lokasi }}</td>
-                                                        <td>{{ $l->Kategori->name == 'Lain-lain' ? $l->kategori_lain : $l->Kategori->name }}
-                                                        </td>
+                                                        @if ($l->kategori === 0)
+                                                            <td>{{ $l->kategori_lain }}</td>
+                                                        @else
+                                                            <td>{{ $l->Kategori->name }}</td>
+                                                        @endif
+
                                                         @if (auth()->user()->Role->name == 'Staff')
                                                             <td>
                                                                 @if ($l->completed)

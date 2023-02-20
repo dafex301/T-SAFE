@@ -36,7 +36,11 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="jenis">Jenis / Kategori Potensi Bahaya</label>
                                             <select class="form-select" aria-label="Jenis" id="jenis" name="kategori">
-                                                <option value="">Pilih Jenis / Kategori</option>
+                                                @if (old('kategori') == null)
+                                                    <option value="" disabled selected>Pilih Jenis / Kategori</option>
+                                                @else
+                                                    <option value="" disabled>Pilih Jenis / Kategori</option>
+                                                @endif
                                                 {{-- Foreach kategori --}}
                                                 @foreach ($kategori as $item)
                                                     @if (old('kategori') == $item->id)
@@ -46,6 +50,11 @@
                                                         <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                     @endif
                                                 @endforeach
+                                                @if (old('kategori') == '0')
+                                                    <option selected value="0">Lain-lain</option>
+                                                @else
+                                                    <option value="0">Lain-lain</option>
+                                                @endif
                                                 {{-- End Foreach --}}
                                             </select>
                                             @error('kategori')
