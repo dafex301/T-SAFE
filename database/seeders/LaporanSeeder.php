@@ -2,8 +2,10 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Faker\Factory;
+use App\Models\Laporan;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class LaporanSeeder extends Seeder
 {
@@ -32,34 +34,32 @@ class LaporanSeeder extends Seeder
         // completed_at is not so far from created_at, maximum 1 day
 
 
-        $faker = \Faker\Factory::create('id_ID');
+        $faker = Factory::create('id_ID');
 
         for ($i = 0; $i < 1024; $i++) {
             $pelapor = $faker->numberBetween(7, 11);
             $kategori = $faker->numberBetween(0, 5);
             $kategori_lain = $kategori == 0 ? $faker->word : null;
-            $tanggal = $faker->dateTimeBetween('2023-01-01', '2023-12-31');
+            $tanggal = $faker->dateTimeBetween('2022-01-01', '2023-02-21');
+            $created_at = $faker->dateTimeBetween($tanggal, $tanggal->modify('+1 day'));
             $deskripsi = $faker->word;
             $lokasi = $faker->word;
             $image = $faker->word;
             $pic_checked = $faker->boolean;
-            $pic_checked_at = $pic_checked ? $faker->dateTimeBetween('2023-01-01', '2023-12-31') : null;
+            $pic_checked_at = $pic_checked ? $faker->dateTimeBetween($created_at, $tanggal->modify('+1 day')) : null;
             $pic = 4;
             $branch_manager = 6;
             $branch_manager_approval = $faker->boolean;
-            $branch_manager_approval_at = $branch_manager_approval ? $faker->dateTimeBetween('2023-01-01', '2023-12-31') : null;
+            $branch_manager_approval_at = $branch_manager_approval ? $faker->dateTimeBetween($created_at, $tanggal->modify('+1 day')) : null;
             $immediate_action = $faker->word;
             $prevention = $faker->word;
             $completed_image = $faker->word;
             $completed = $faker->boolean;
             $completed_by = $completed ? $faker->numberBetween(4, 5) : null;
-            // created_at is random date between $tanggal + 1 day
-            $created_at = $faker->dateTimeBetween($tanggal, $tanggal->modify('+1 day'));
-            // completed_at is not so far from created_at, maximum 1 day
             $completed_at = $completed ? $faker->dateTimeBetween($created_at, $tanggal->modify('+1 day')) : null;
 
 
-            \App\Models\Laporan::create([
+            Laporan::create([
                 'pelapor' => $pelapor,
                 'tanggal' => $tanggal,
                 'lokasi' => $lokasi,
