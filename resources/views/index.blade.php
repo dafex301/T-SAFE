@@ -368,6 +368,54 @@
 
         // eslint-disable-next-line no-unused-vars
         let kategori = {!! json_encode($kategori) !!};
+        let laporanPerKategori = {!! json_encode($laporanPerKategori) !!};
+        laporanPerKategori = laporanPerKategori.map((item) => {
+            return item.reverse();
+        });
+
+        console.log(kategori);
+        console.log(laporanPerKategori);
+
+        // Create a dataset for borderColor, borderWith, and backgroundColor
+        const colorData = {
+            borderColor: [
+                coreui.Utils.hexToRgba(
+                    coreui.Utils.getStyle("--cui-info"),
+                    10
+                ),
+
+                coreui.Utils.hexToRgba(
+                    coreui.Utils.getStyle("--cui-success"),
+                    10
+                ),
+
+                coreui.Utils.hexToRgba(
+                    coreui.Utils.getStyle("--cui-danger"),
+                    10
+                ),
+
+                coreui.Utils.hexToRgba(
+                    coreui.Utils.getStyle("--cui-warning"),
+                    10
+                ),
+
+                coreui.Utils.hexToRgba(
+                    coreui.Utils.getStyle("--cui-primary"),
+                    10
+                ),
+
+                coreui.Utils.hexToRgba(
+                    coreui.Utils.getStyle("--cui-secondary"),
+                    10
+                ),
+            ],
+
+            backgroundColor: [coreui.Utils.getStyle("--cui-info"), coreui.Utils.getStyle("--cui-success"), coreui.Utils
+                .getStyle("--cui-danger"), coreui.Utils.getStyle("--cui-warning"), coreui.Utils.getStyle(
+                    "--cui-primary"), coreui.Utils.getStyle("--cui-secondary")
+            ],
+        };
+
         const mainChart = new Chart(document.getElementById("main-chart"), {
             type: "line",
 
@@ -385,49 +433,64 @@
                     }).reverse(),
                 ],
 
-                datasets: [{
-                        label: {!! json_encode($kategori[0]->name) !!},
-                        backgroundColor: coreui.Utils.hexToRgba(
-                            coreui.Utils.getStyle("--cui-info"),
-                            10
-                        ),
-                        borderColor: coreui.Utils.getStyle("--cui-info"),
-                        pointHoverBackgroundColor: "#fff",
-                        borderWidth: 2,
-                        data: [
-                            random(50, 200),
-                            random(50, 200),
-                            random(50, 200),
-                            random(50, 200),
-                            random(50, 200),
-                            random(50, 200),
-                            random(50, 200),
-                        ],
-                        fill: true,
-                    },
-                    {
-                        label: "My Second dataset",
-                        borderColor: coreui.Utils.getStyle("--cui-success"),
-                        pointHoverBackgroundColor: "#fff",
-                        borderWidth: 2,
-                        data: [
-                            random(50, 200),
-                            random(50, 200),
-                            random(50, 200),
-                            random(50, 200),
-                            random(50, 200),
-                            random(50, 200),
-                            random(50, 200),
-                        ],
-                    },
-                    {
-                        label: "My Third dataset",
-                        borderColor: coreui.Utils.getStyle("--cui-danger"),
-                        pointHoverBackgroundColor: "#fff",
-                        borderWidth: 1,
-                        borderDash: [8, 1, 2],
-                        data: [65, 65, 65, 65, 65, 65, 65],
-                    },
+                datasets: [
+                    // {
+                    //     label: {!! json_encode($kategori[0]->name) !!},
+                    // backgroundColor: coreui.Utils.hexToRgba(
+                    //         coreui.Utils.getStyle("--cui-info"),
+                    //         10
+                    //     ),
+                    //     borderColor: coreui.Utils.getStyle("--cui-info"),
+                    //     pointHoverBackgroundColor: "#fff",
+                    //     borderWidth: 2,
+                    //     data: [
+                    //         random(50, 200),
+                    //         random(50, 200),
+                    //         random(50, 200),
+                    //         random(50, 200),
+                    //         random(50, 200),
+                    //         random(50, 200),
+                    //         random(50, 200),
+                    //     ],
+                    //     fill: true,
+                    // },
+                    // {
+                    //     label: "My Second dataset",
+                    //     borderColor: coreui.Utils.getStyle("--cui-success"),
+                    //     pointHoverBackgroundColor: "#fff",
+                    //     borderWidth: 2,
+                    //     data: [
+                    //         random(50, 200),
+                    //         random(50, 200),
+                    //         random(50, 200),
+                    //         random(50, 200),
+                    //         random(50, 200),
+                    //         random(50, 200),
+                    //         random(50, 200),
+                    //     ],
+                    // },
+                    // {
+                    //     label: "My Third dataset",
+                    //     borderColor: coreui.Utils.getStyle("--cui-danger"),
+                    //     pointHoverBackgroundColor: "#fff",
+                    //     borderWidth: 1,
+                    //     borderDash: [8, 1, 2],
+                    //     data: [65, 65, 65, 65, 65, 65, 65],
+                    // },
+
+
+
+                    // Loop laporanPerKategori and generate datset
+                    ...laporanPerKategori.map((item, index) => {
+                        return {
+                            label: kategori[index].name,
+                            backgroundColor: colorData.backgroundColor[index],
+                            borderColor: colorData.borderColor[index],
+                            pointHoverBackgroundColor: "#fff",
+                            borderWidth: 4,
+                            data: item,
+                        };
+                    }),
                 ],
             },
             options: {
