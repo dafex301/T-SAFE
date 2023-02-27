@@ -20,7 +20,7 @@ class DashboardController extends Controller
         $laporanSelesai = Laporan::where('completed', true)->count();
 
         // Get the laporan completed average
-        $averageDifference = Laporan::selectRaw('AVG(TIMESTAMPDIFF(SECOND, created_at, completed_at)/3600.0) as avg_diff_in_hours')
+        $averageDifference = Laporan::selectRaw('AVG(TIMESTAMPDIFF(SECOND, created_at, dpnp_checked_at)/3600.0) as avg_diff_in_hours')
             ->get();
 
         $waktuPenyelesaian = round($averageDifference[0]->avg_diff_in_hours, 1);

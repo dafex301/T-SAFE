@@ -36,6 +36,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
         // Laporan Routes
         Route::get('/laporan', 'LaporanController@index')->name('laporan.index');
+        Route::get('/pic/laporan', 'LaporanController@checkPIC')->name('laporan.checkPIC');
 
         // History Routes
         Route::get('/history', 'LaporanController@history')->name('laporan.history');

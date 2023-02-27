@@ -53,7 +53,7 @@
                                                             <td>
                                                                 @if ($l->completed)
                                                                     <span class="badge text-bg-success">Selesai</span>
-                                                                @elseif ($l->branch_manager_approval)
+                                                                @elseif ($l->branch_manager_checked)
                                                                     <span class="badge text-bg-info">Diproses DPnP</span>
                                                                 @elseif ($l->pic_checked)
                                                                     <span class="badge text-bg-info">Diproses BM</span>

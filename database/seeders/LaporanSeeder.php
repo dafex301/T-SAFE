@@ -26,17 +26,17 @@ class LaporanSeeder extends Seeder
         // pic_checked_at is random date between 2023-01-01 to 2023-12-31
         // pic is 4
         // branch_manager is 6
-        // branch_manager_approval is random boolean
-        // branch_manager_approval_at is random date between 2023-01-01 to 2023-12-31
+        // branch_manager_checked is random boolean
+        // branch_manager_checked_at is random date between 2023-01-01 to 2023-12-31
         // immediate_action, prevention, completed_image is random string 1 word
         // completed is random boolean
-        // completed_by is 4 or 5
-        // completed_at is not so far from created_at, maximum 1 day
+        // dpnp is 4 or 5
+        // dpnp_checked_at is not so far from created_at, maximum 1 day
 
 
         $faker = Factory::create('id_ID');
 
-        for ($i = 0; $i < 1024; $i++) {
+        for ($i = 0; $i < 0; $i++) {
             $pelapor = $faker->numberBetween(7, 11);
             $kategori = $faker->numberBetween(0, 5);
             $kategori_lain = $kategori == 0 ? $faker->word : null;
@@ -49,14 +49,14 @@ class LaporanSeeder extends Seeder
             $pic_checked_at = $pic_checked ? $faker->dateTimeBetween($created_at, $tanggal->modify('+1 day')) : null;
             $pic = 4;
             $branch_manager = 6;
-            $branch_manager_approval = $faker->boolean;
-            $branch_manager_approval_at = $branch_manager_approval ? $faker->dateTimeBetween($created_at, $tanggal->modify('+1 day')) : null;
+            $branch_manager_checked = $faker->boolean;
+            $branch_manager_checked_at = $branch_manager_checked ? $faker->dateTimeBetween($created_at, $tanggal->modify('+1 day')) : null;
             $immediate_action = $faker->word;
             $prevention = $faker->word;
             $completed_image = $faker->word;
             $completed = $faker->boolean;
-            $completed_by = $completed ? $faker->numberBetween(4, 5) : null;
-            $completed_at = $completed ? $faker->dateTimeBetween($created_at, $tanggal->modify('+1 day')) : null;
+            $dpnp = $completed ? $faker->numberBetween(4, 5) : null;
+            $dpnp_checked_at = $completed ? $faker->dateTimeBetween($created_at, $tanggal->modify('+1 day')) : null;
 
 
             Laporan::create([
@@ -71,14 +71,14 @@ class LaporanSeeder extends Seeder
                 'pic_checked_at' => $pic_checked_at,
                 'pic' => $pic,
                 'branch_manager' => $branch_manager,
-                'branch_manager_approval' => $branch_manager_approval,
-                'branch_manager_approval_at' => $branch_manager_approval_at,
+                'branch_manager_checked' => $branch_manager_checked,
+                'branch_manager_checked_at' => $branch_manager_checked_at,
                 'immediate_action' => $immediate_action,
                 'prevention' => $prevention,
                 'completed' => $completed,
                 'completed_image' => $completed_image,
-                'completed_at' => $completed_at,
-                'completed_by' => $completed_by,
+                'dpnp_checked_at' => $dpnp_checked_at,
+                'dpnp' => $dpnp,
                 'created_at' => $created_at,
             ]);
         }

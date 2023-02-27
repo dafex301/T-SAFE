@@ -16,24 +16,37 @@ return new class extends Migration
         Schema::create('laporans', function (Blueprint $table) {
             $table->id();
             $table->foreignId('pelapor');
+            $table->foreignId('cabang');
             $table->date('tanggal');
             $table->string('lokasi');
             $table->foreignId('kategori');
             $table->string('kategori_lain')->nullable();
             $table->string('deskripsi');
             $table->string('image');
+
+            $table->string('immediate_action')->nullable();
+            $table->string('prevention')->nullable();
+
             $table->boolean('pic_checked')->default(false);
             $table->timestamp('pic_checked_at')->nullable();
             $table->foreignId('pic')->nullable();
+            $table->boolean('pic_rejected')->default(false);
+            $table->string('pic_rejected_reason')->nullable();
+
             $table->foreignId('branch_manager')->nullable();
-            $table->boolean('branch_manager_approval')->default(false);
-            $table->timestamp('branch_manager_approval_at')->nullable();
+            $table->boolean('branch_manager_checked')->default(false);
+            $table->timestamp('branch_manager_checked_at')->nullable();
+            $table->boolean('branch_manager_rejected')->default(false);
+            $table->string('branch_manager_rejected_reason')->nullable();
+
+            $table->boolean('dpnp_checked')->default(false);
+            $table->timestamp('dpnp_checked_at')->nullable();
+            $table->boolean('dpnp_rejected')->default(false);
+            $table->string('dpnp_rejected_reason')->nullable();
+            $table->foreignId('dpnp')->nullable();
+
             $table->boolean('completed')->default(false);
-            $table->string('immediate_action')->nullable();
-            $table->string('prevention')->nullable();
             $table->string('completed_image')->nullable();
-            $table->timestamp('completed_at')->nullable();
-            $table->foreignId('completed_by')->nullable();
             $table->timestamps();
         });
     }

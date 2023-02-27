@@ -235,148 +235,61 @@
     <script src="{{ url('vendors/chart.js/js/chart.min.js') }}"></script>
     <script src="{{ url('vendors/@coreui/chartjs/js/coreui-chartjs.js') }}"></script>
     <script src="{{ url('vendors/@coreui/utils/js/coreui-utils.js') }}"></script>
-    <script src="{{ url('js/main.js') }}"></script>
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
 
 
     <!-- DataTables -->
-    <script src="{{ url('js/datatables.min.js') }}"></script>
-    <script src="{{ url('js/datatables/dataTables.bulma.min.js') }}"></script>
-    <script src="{{ url('js/datatables/dataTables.buttons.min.js') }}"></script>
-    <script src="{{ url('js/datatables/buttons.bulma.min.js') }}"></script>
-    <script src="{{ url('js/datatables/jszip.min.js') }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        // Shared ID
+        gtag('config', 'UA-118965717-3');
+        // Bootstrap ID
+        gtag('config', 'UA-118965717-5');
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous">
+    </script>
+    <script src="{{ url('https://code.jquery.com/jquery-3.6.3.slim.min.js') }}"
+        integrity="sha256-ZwqZIVdD3iXNyGHbSYdsmWP//UBokj2FHAxKuSBKDSo=" crossorigin="anonymous"></script>
+    <script src="{{ url('vendors/@coreui/coreui/js/coreui.bundle.min.js') }}"></script>
     {{-- <script src="{{ url('js/datatables/pdfmake.min.js') }}"></script> --}}
     {{-- <script src="{{ url('js/datatables/vfs_fonts.js') }}"></script> --}}
-    <script src="{{ url('js/datatables/buttons.html5.min.js') }}"></script>
-    <script src="{{ url('js/datatables/buttons.print.min.js') }}"></script>
-    <script src="{{ url('js/datatables/buttons.colVis.min.js') }}"></script>
+    <script src="{{ url('vendors/simplebar/js/simplebar.min.js') }}"></script>
+    <script src="{{ url('vendors/chart.js/js/chart.min.js') }}"></script>
+    <script src="{{ url('vendors/@coreui/chartjs/js/coreui-chartjs.js') }}"></script>
 
-    <script>
-        $(document).ready(function() {
-            var table = $('#myTable').DataTable({
-                lengthChange: false,
-                buttons: [
-                    'copy', 'csv', 'excel', 'print'
-                ]
-            });
-
-            table.buttons().container()
-                .appendTo($('div.column.is-half', table.table().container()).eq(0));
-        });
-    </script>
+    <script src="{{ url('vendors/@coreui/utils/js/coreui-utils.js') }}"></script>
 
     <!-- Input Form -->
-    <script>
-        // Jenis Lain Input
-        if ($('#jenis').val() == 0) {
-            $('#jenis-lain-container').show();
-        } else {
-            $('#jenis-lain-container').hide();
-        }
-
-        $('#jenis').change(function() {
-            console.log(($(this).val()));
-            if ($(this).val() == 0) {
-                $('#jenis-lain-container').show();
-            } else {
-                $('#jenis-lain-container').hide();
-            }
-        });
-
-
-
-        // Image upload preview
-        $('#dokumentasi').change(function() {
-            var file = this.files[0];
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                var img = new Image();
-                img.src = e.target.result;
-                img.onload = function() {
-                    var canvas = document.createElement('canvas');
-                    var ctx = canvas.getContext('2d');
-                    var MAX_WIDTH = 300;
-                    var MAX_HEIGHT = 300;
-                    var width = img.width;
-                    var height = img.height;
-                    if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
-                        }
-                    } else {
-                        if (height > MAX_HEIGHT) {
-                            width *= MAX_HEIGHT / height;
-                            height = MAX_HEIGHT;
-                        }
-                    }
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
-                    var dataurl = canvas.toDataURL('image/png');
-                    $('.img-container').html('<img src="' + dataurl +
-                        '" class="img-fluid" alt="Responsive image">');
-                }
-            }
-            reader.readAsDataURL(file);
-        });
-    </script>
+    <script async="" src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
 
     <!-- Upload Preview -->
     <script>
-        // When upload image, show preview, keep the ratio to original
-        $('#dokumentasi').change(function() {
-            var file = this.files[0];
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                var img = new Image();
-                img.src = e.target.result;
-                img.onload = function() {
-                    var canvas = document.createElement('canvas');
-                    var ctx = canvas.getContext('2d');
-                    var MAX_WIDTH = 300;
-                    var MAX_HEIGHT = 300;
-                    var width = img.width;
-                    var height = img.height;
-                    if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
-                        }
-                    } else {
-                        if (height > MAX_HEIGHT) {
-                            width *= MAX_HEIGHT / height;
-                            height = MAX_HEIGHT;
-                        }
-                    }
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
-                    var dataurl = canvas.toDataURL('image/png');
-                    $('.img-container').html('<img src="' + dataurl +
-                        '" class="img-fluid" alt="Responsive image">');
-                }
-            }
-            reader.readAsDataURL(file);
-        });
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+        // Shared ID
+        gtag('config', 'UA-118965717-3');
+        // Bootstrap ID
+        gtag('config', 'UA-118965717-5');
     </script>
 
 
 
     <!-- Modal Data -->
-    <script>
-        const imageModal = document.getElementById('imageModal')
-        imageModal.addEventListener('show.bs.modal', event => {
-            // Button that triggered the modal
-            const button = event.relatedTarget
-            // Extract info from data-bs-* attributes
-            const image = button.getAttribute('data-bs-whatever')
-            // If necessary, you could initiate an AJAX request here
-            // and then do the updating in a callback.
-            //
-            // Update the modal's content.
-            const modalBody = imageModal.querySelector('.modal-body')
-            modalBody.innerHTML = `<img src="storage/${image}" class="img-fluid" alt="Responsive image">`
-        })
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
+        integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous">
     </script>
 
 </body>

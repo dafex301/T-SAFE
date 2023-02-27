@@ -60,4 +60,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Role::class, 'role', 'id');
     }
+
+    // Relation with cabang
+    public function Cabang()
+    {
+        return $this->belongsTo(Cabang::class, 'cabang', 'id');
+    }
 }

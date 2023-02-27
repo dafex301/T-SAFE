@@ -16,26 +16,53 @@ class LaporanController extends Controller
      */
     public function index()
     {
-        $role = auth()->user()->Role->name;
+        $user = auth()->user();
 
-        $laporan = null;
-
-        if ($role == 'Admin') {
-            $laporan = Laporan::where('completed', false)->orderBy('updated_at', 'desc')->get();
-        } else if ($role == 'Staff') {
-            $laporan = Laporan::where('pelapor', auth()->user()->id)->orderBy('updated_at', 'desc')->get();
-        } else if ($role == 'PIC') {
-            $laporan = Laporan::where('pic_checked', false)->orderBy('updated_at', 'desc')->get();
-        } else if ($role == 'BM') {
-            $laporan = Laporan::where('pic_checked', true)->where('branch_manager_approval', false)->where('completed', false)->orderBy('updated_at', 'desc')->get();
-        } else if ($role == "DPnP") {
-            $laporan = Laporan::where('branch_manager_approval', true)->where('completed', false)->orderBy('updated_at', 'desc')->get();
-        }
+        $laporan = Laporan::where('pelapor', $user->id)->orderBy('updated_at', 'desc')->get();
 
         return view('laporan', [
             'laporan' => $laporan,
         ]);
     }
+
+    /**
+     * Display a listing of the resource by PIC.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function checkPIC()
+    {
+        $user = auth()->user();
+
+        $laporan = Laporan::where('pic_checked', false)
+            ->where('cabang', $user->cabang)
+            ->orderBy('updated_at', 'desc')->get();
+
+
+        return view('laporan', [
+            'laporan' => $laporan,
+        ]);
+    }
+
+    /**
+     * Display a listing of the resource by Branch Manager.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function checkBM()
+    {
+        $user = auth()->user();
+
+        $laporan = Laporan::where('pic_checked', true)
+            ->where('branch_manager_checked', false)
+            ->where('cabang', $user->cabang)
+            ->orderBy('updated_at', 'desc')->get();
+
+        return view('laporan', [
+            'laporan' => $laporan,
+        ]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -43,8 +70,18 @@ class LaporanController extends Controller
      */
     public function history()
     {
+        $user = auth()->user();
+        $role = $user->Role->name;
+
+        if ($role == 'DPnP') {
+            $laporan = Laporan::orderBy('updated_at', 'desc')->get();
+        } else {
+            $laporan = Laporan::orderBy('updated_at', 'desc')
+                ->where('cabang', $user->cabang)
+                ->get();
+        }
         return view('history', [
-            'laporan' => Laporan::orderBy('updated_at', 'desc')->get(),
+            'laporan' => $laporan
         ]);
     }
 
@@ -77,8 +114,6 @@ class LaporanController extends Controller
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
 
-
-
         // Check if kategori is 6 (Lain-lain)
         if ($request->kategori == '0') {
             $this->validate($request, [
@@ -93,6 +128,7 @@ class LaporanController extends Controller
         // Create new Laporan
         $laporan = Laporan::create([
             'pelapor' => auth()->user()->id,
+            'cabang' => auth()->user()->cabang,
             'tanggal' => $request->tanggal,
             'lokasi' => $request->lokasi,
             'kategori' => $request->kategori,
@@ -175,8 +211,8 @@ class LaporanController extends Controller
         }
 
         $laporan->completed = true;
-        $laporan->completed_at = now();
-        $laporan->completed_by = auth()->user()->id;
+        $laporan->dpnp_checked_at = now();
+        $laporan->dpnp = auth()->user()->id;
         $laporan->completed_image = $filePath;
 
         $laporan->save();
@@ -229,8 +265,8 @@ class LaporanController extends Controller
     {
         $laporan = Laporan::find($id);
         $laporan->branch_manager = auth()->user()->id;
-        $laporan->branch_manager_approval = true;
-        $laporan->branch_manager_approval_at = now();
+        $laporan->branch_manager_checked = true;
+        $laporan->branch_manager_checked_at = now();
 
         $laporan->save();
 

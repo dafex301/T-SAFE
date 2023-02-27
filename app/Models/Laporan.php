@@ -13,6 +13,7 @@ class Laporan extends Model
 
     protected $fillable = [
         'pelapor',
+        'cabang',
         'tanggal',
         'lokasi',
         'kategori',
@@ -23,14 +24,14 @@ class Laporan extends Model
         'pic_checked_at',
         'pic',
         'branch_manager',
-        'branch_manager_approval',
-        'branch_manager_approval_at',
+        'branch_manager_checked',
+        'branch_manager_checked_at',
         'immediate_action',
         'prevention',
         'completed',
         'completed_image',
-        'completed_at',
-        'completed_by',
+        'dpnp_checked_at',
+        'dpnp',
         'created_at',
     ];
 
@@ -60,8 +61,14 @@ class Laporan extends Model
     }
 
     // Completed by
-    public function completed_by()
+    public function DPNP()
     {
-        return $this->belongsTo(User::class, 'completed_by');
+        return $this->belongsTo(User::class, 'dpnp');
+    }
+
+    // Cabang
+    public function Cabang()
+    {
+        return $this->belongsTo(Cabang::class, 'cabang');
     }
 }
