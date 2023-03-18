@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LaporanController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -36,14 +37,13 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
         // Laporan Routes
         Route::get('/laporan', 'LaporanController@index')->name('laporan.index');
-        Route::get('/pic/laporan', 'LaporanController@checkPIC')->name('laporan.checkPIC');
 
         // History Routes
         Route::get('/history', 'LaporanController@history')->name('laporan.history');
 
         // Verifikasi Laporan Routes
-        Route::get('/verifikasi/{id}', 'LaporanController@show')->name('laporan.show');
-        Route::post('/verifikasi/{id}', 'LaporanController@verifikasi')->name('laporan.verifikasi');
+        Route::get('/detail/{id}', 'LaporanController@show')->name('laporan.show');
+        Route::post('/detail/{id}', 'LaporanController@verifikasi')->name('laporan.detail');
 
         // Tindak Lanjut Routes
         Route::post('/tindaklanjut/{id}', 'LaporanController@tindaklanjut')->name('laporan.tindaklanjut');
@@ -51,8 +51,26 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         // Approve Routes
         Route::post('/approve/{id}', 'LaporanController@approve')->name('laporan.approve');
 
+        // PIC Routes
+        Route::get('/pic/laporan', 'LaporanController@checkPIC')->name('laporan.checkPIC');
+
+        // Branch Manager Routes
+        Route::get('/bm/laporan', 'LaporanController@checkBM')->name('laporan.checkBM');
+
+        // DPnP Routes
+        Route::get('/dpnp/laporan', 'LaporanController@checkDPnP')->name('laporan.checkDPnP');
+
+        // Reject Routes
+        Route::post('/reject/{id}', 'LaporanController@reject')->name('laporan.reject');
+
         // History Routes
         Route::get('/history', 'LaporanController@history')->name('laporan.history');
+
+        // Revisi Routes
+        Route::get('/{role}/revisi/{id}', 'LaporanController@detailRevisi')->name('laporan.detailRevisi');
+        Route::post('/revisi/{id}', 'LaporanController@revisi')->name('laporan.revisi');
+        Route::get('/{role}/revisi', 'LaporanController@getRevisiStaff')->name('laporan.revisiStaff');
+
 
         // Logout Routes
         Route::get('/logout', 'LogoutController@perform')->name('logout.perform');

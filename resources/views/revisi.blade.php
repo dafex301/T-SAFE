@@ -21,7 +21,8 @@
                                                     <th scope="col">Hari, Tanggal</th>
                                                     <th scope="col">Lokasi</th>
                                                     <th scope="col">Kategori</th>
-                                                    <th scope="col">Status</th>
+                                                    <th scope="col">Pelapor</th>
+                                                    <th scope="col">Alasan Ditolak</th>
                                                     <th scope="col">Aksi</th>
                                                 </tr>
                                             </thead>
@@ -40,25 +41,14 @@
                                                         @else
                                                             <td>{{ $l->Kategori->name }}</td>
                                                         @endif
+                                                        <td>{{ $l->Pelapor->name }}</td>
 
-                                                        <td>
-                                                            @if ($l->completed)
-                                                                <span class="badge text-bg-success">Selesai</span>
-                                                            @elseif ($l->pic_rejected)
-                                                                <span class="badge text-bg-danger">Ditolak PIC</span>
-                                                            @elseif ($l->bm_rejected)
-                                                                <span class="badge text-bg-danger">Ditolak BM</span>
-                                                            @elseif ($l->dpnp_rejected)
-                                                                <span class="badge text-bg-danger">Ditolak DPnP</span>
-                                                            @elseif ($l->branch_manager_checked)
-                                                                <span class="badge text-bg-info">Diproses DPnP</span>
-                                                            @elseif ($l->pic_checked)
-                                                                <span class="badge text-bg-info">Diproses BM</span>
-                                                            @else
-                                                                <span class="badge text-bg-secondary">Diproses
-                                                                    PIC</span>
-                                                            @endif
-                                                        </td>
+                                                        @if (auth()->user()->Role->name === 'PIC')
+                                                            <td>{{ $l->bm_rejected_reason ?? ($l->dpnp_rejected_reason ?? '-') }}
+                                                            </td>
+                                                        @elseif (auth()->user()->Role->name === 'BM')
+                                                            <td>{{ $l->dpnp_rejected_reason ?? '-' }}</td>
+                                                        @endif
                                                         <td>
                                                             <button type="button" class="btn btn-outline-primary"
                                                                 data-bs-toggle="modal" data-bs-target="#imageModal"
@@ -70,22 +60,7 @@
                                                                         d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
                                                                 </svg>
                                                             </button>
-
-                                                            @if ($l->completed_image)
-                                                                <button type="button"
-                                                                    class="btn btn-outline-success completed-img-docs"
-                                                                    data-bs-toggle="modal" data-bs-target="#imageModal"
-                                                                    data-bs-whatever="{{ $l->completed_image }}">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
-                                                                        viewBox="0 0 24 24" strokeWidth={1.5}
-                                                                        stroke="currentColor" style="height: 20px;">
-                                                                        <path strokeLinecap="round" strokeLinejoin="round"
-                                                                            d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-                                                                    </svg>
-                                                                </button>
-                                                            @endif
-
-                                                            @if ((auth()->user()->id === $l->pelapor && $l->pic_rejected) || Request::path() !== 'laporan')
+                                                            @if (auth()->user()->Role->name !== 'Staff' && auth()->user()->Role->name !== 'BM')
                                                                 <a href="/detail/{{ $l->id }}"
                                                                     class="btn btn-outline-success">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
@@ -96,7 +71,6 @@
                                                                     </svg>
                                                                 </a>
                                                             @endif
-
                                                         </td>
                                                     </tr>
                                                 @endforeach
@@ -156,6 +130,7 @@
         </div>
     </div>
     <!-- End of Approve Modal -->
+
 
 
     {{-- Approve Modal Script --}}

@@ -153,6 +153,16 @@
                             </svg>
 
                             Cek Laporan Masuk</a></li>
+
+                    <li class="nav-item"><a class="nav-link" href="/pic/revisi">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                style="width: 20px; margin: 0 5px 0 5px">
+                                <path
+                                    d="M7.5 3.375c0-1.036.84-1.875 1.875-1.875h.375a3.75 3.75 0 013.75 3.75v1.875C13.5 8.161 14.34 9 15.375 9h1.875A3.75 3.75 0 0121 12.75v3.375C21 17.16 20.16 18 19.125 18h-9.75A1.875 1.875 0 017.5 16.125V3.375z" />
+                                <path
+                                    d="M15 5.25a5.23 5.23 0 00-1.279-3.434 9.768 9.768 0 016.963 6.963A5.23 5.23 0 0017.25 7.5h-1.875A.375.375 0 0115 7.125V5.25zM4.875 6H6v10.125A3.375 3.375 0 009.375 19.5H16.5v1.125c0 1.035-.84 1.875-1.875 1.875h-9.75A1.875 1.875 0 013 20.625V7.875C3 6.839 3.84 6 4.875 6z" />
+                            </svg>
+                            Revisi Laporan</a></li>
                 @elseif (auth()->user()->Role->name === 'BM')
                     <li class="nav-title">Menu Branch Manager</li>
                     <li class="nav-item"><a class="nav-link" href="/bm/laporan">
@@ -167,6 +177,16 @@
                             </svg>
 
                             Approve Laporan</a></li>
+
+                    <li class="nav-item"><a class="nav-link" href="/bm/revisi">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                style="width: 20px; margin: 0 5px 0 5px">
+                                <path
+                                    d="M7.5 3.375c0-1.036.84-1.875 1.875-1.875h.375a3.75 3.75 0 013.75 3.75v1.875C13.5 8.161 14.34 9 15.375 9h1.875A3.75 3.75 0 0121 12.75v3.375C21 17.16 20.16 18 19.125 18h-9.75A1.875 1.875 0 017.5 16.125V3.375z" />
+                                <path
+                                    d="M15 5.25a5.23 5.23 0 00-1.279-3.434 9.768 9.768 0 016.963 6.963A5.23 5.23 0 0017.25 7.5h-1.875A.375.375 0 0115 7.125V5.25zM4.875 6H6v10.125A3.375 3.375 0 009.375 19.5H16.5v1.125c0 1.035-.84 1.875-1.875 1.875h-9.75A1.875 1.875 0 013 20.625V7.875C3 6.839 3.84 6 4.875 6z" />
+                            </svg>
+                            Laporan Ditolak</a></li>
                 @elseif (auth()->user()->Role->name === 'DPnP')
                     <li class="nav-title">Menu Div. PNP</li>
                     <li class="nav-item"><a class="nav-link" href="/dpnp/laporan">
@@ -316,86 +336,7 @@
                 $('#jenis-lain-container').hide();
             }
         });
-
-
-
-        // Image upload preview
-        $('#dokumentasi').change(function() {
-            var file = this.files[0];
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                var img = new Image();
-                img.src = e.target.result;
-                img.onload = function() {
-                    var canvas = document.createElement('canvas');
-                    var ctx = canvas.getContext('2d');
-                    var MAX_WIDTH = 300;
-                    var MAX_HEIGHT = 300;
-                    var width = img.width;
-                    var height = img.height;
-                    if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
-                        }
-                    } else {
-                        if (height > MAX_HEIGHT) {
-                            width *= MAX_HEIGHT / height;
-                            height = MAX_HEIGHT;
-                        }
-                    }
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
-                    var dataurl = canvas.toDataURL('image/png');
-                    $('.img-container').html('<img src="' + dataurl +
-                        '" class="img-fluid" alt="Responsive image">');
-                }
-            }
-            reader.readAsDataURL(file);
-        });
     </script>
-
-    <!-- Upload Preview -->
-    <script>
-        // When upload image, show preview, keep the ratio to original
-        $('#dokumentasi').change(function() {
-            var file = this.files[0];
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                var img = new Image();
-                img.src = e.target.result;
-                img.onload = function() {
-                    var canvas = document.createElement('canvas');
-                    var ctx = canvas.getContext('2d');
-                    var MAX_WIDTH = 300;
-                    var MAX_HEIGHT = 300;
-                    var width = img.width;
-                    var height = img.height;
-                    if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
-                        }
-                    } else {
-                        if (height > MAX_HEIGHT) {
-                            width *= MAX_HEIGHT / height;
-                            height = MAX_HEIGHT;
-                        }
-                    }
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
-                    var dataurl = canvas.toDataURL('image/png');
-                    $('.img-container').html('<img src="' + dataurl +
-                        '" class="img-fluid" alt="Responsive image">');
-                }
-            }
-            reader.readAsDataURL(file);
-        });
-    </script>
-
-
 
     <!-- Modal Data -->
     <script>
@@ -410,8 +351,84 @@
             //
             // Update the modal's content.
             const modalBody = imageModal.querySelector('.modal-body')
-            modalBody.innerHTML = `<img src="storage/${image}" class="img-fluid" alt="Responsive image">`
+            modalBody.innerHTML = `<img src="/storage/${image}" class="img-fluid" alt="Responsive image">`
         })
+    </script>
+
+    <!-- Upload Preview -->
+    <script>
+        // When upload image, show preview, keep the ratio to original
+        $('#dokumentasi').change(function() {
+            console.log('test2');
+            var file = this.files[0];
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var img = new Image();
+                img.src = e.target.result;
+                img.onload = function() {
+                    var canvas = document.createElement('canvas');
+                    var ctx = canvas.getContext('2d');
+                    var MAX_WIDTH = 300;
+                    var MAX_HEIGHT = 300;
+                    var width = img.width;
+                    var height = img.height;
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+                    var dataurl = canvas.toDataURL('image/png');
+                    $('.img-container').html('<img src="' + dataurl +
+                        '" class="img-fluid" alt="Responsive image">');
+                }
+            }
+            reader.readAsDataURL(file);
+        });
+
+        $('#completed-image').change(function() {
+            console.log('test');
+            var file = this.files[0];
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var img = new Image();
+                img.src = e.target.result;
+                img.onload = function() {
+                    var canvas = document.createElement('canvas');
+                    var ctx = canvas.getContext('2d');
+                    var MAX_WIDTH = 300;
+                    var MAX_HEIGHT = 300;
+                    var width = img.width;
+                    var height = img.height;
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    ctx.drawImage(img, 0, 0, width, height);
+                    var dataurl = canvas.toDataURL('image/png');
+                    $('.img-container-2').html('<img src="' + dataurl +
+                        '" class="img-fluid" alt="Responsive image">');
+                }
+            }
+            reader.readAsDataURL(file);
+        });
     </script>
 
 </body>

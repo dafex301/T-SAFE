@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Laporan;
 use App\Models\Kategori;
+use Illuminate\Support\Facades\File;
 use App\Http\Requests\StoreLaporanRequest;
 use App\Http\Requests\UpdateLaporanRequest;
 
@@ -18,7 +19,8 @@ class LaporanController extends Controller
     {
         $user = auth()->user();
 
-        $laporan = Laporan::where('pelapor', $user->id)->orderBy('updated_at', 'desc')->get();
+        $laporan = Laporan::where('pelapor', $user->id)
+            ->orderBy('updated_at', 'desc')->get();
 
         return view('laporan', [
             'laporan' => $laporan,
@@ -54,8 +56,30 @@ class LaporanController extends Controller
         $user = auth()->user();
 
         $laporan = Laporan::where('pic_checked', true)
-            ->where('branch_manager_checked', false)
+            ->where('pic_rejected', false)
+            ->where('dpnp_checked', false)
+            ->where('completed', false)
             ->where('cabang', $user->cabang)
+            ->orderBy('pic_checked_at', 'desc')->get();
+
+        return view('laporan', [
+            'laporan' => $laporan,
+        ]);
+    }
+
+    /**
+     * Display a listing of the resource by Div. PnP.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function checkDPnP()
+    {
+        $user = auth()->user();
+
+        $laporan = Laporan::where('branch_manager_checked', true)
+            ->where('branch_manager_rejected', false)
+            ->where('pic_rejected', false)
+            ->where('dpnp_checked', false)
             ->orderBy('updated_at', 'desc')->get();
 
         return view('laporan', [
@@ -74,7 +98,9 @@ class LaporanController extends Controller
         $role = $user->Role->name;
 
         if ($role == 'DPnP') {
-            $laporan = Laporan::orderBy('updated_at', 'desc')->get();
+            $laporan = Laporan::orderBy('updated_at', 'desc')
+                ->where('dpnp_checked', true)
+                ->get();
         } else {
             $laporan = Laporan::orderBy('updated_at', 'desc')
                 ->where('cabang', $user->cabang)
@@ -153,17 +179,36 @@ class LaporanController extends Controller
             $role = auth()->user()->Role->name;
             $laporan = Laporan::find($id);
 
-            if (!$laporan->completed && $role == 'Staff') {
+            if (!$laporan->completed && $role == 'Staff' && $laporan->pelapor != auth()->user()->id) {
                 throw new \Throwable();
             }
 
-            return view('verifikasi', [
+            return view('detail', [
                 'laporan' => $laporan,
                 'kategori' => Kategori::all()
             ]);
         } catch (\Throwable $th) {
             return redirect()->route('laporan.index')->with('error', 'Anda tidak dapat mengakses laporan ini!');
         }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\Laporan  $laporan
+     * @return \Illuminate\Http\Response
+     */
+    public function detailRevisi(String $role, String $id)
+    {
+        $laporan = Laporan::find($id);
+
+        if ($role == 'pic') {
+        }
+
+        // return view('detail', [
+        //     'laporan' => $laporan,
+        //     'kategori' => Kategori::all()
+        // ]);
     }
 
     /**
@@ -270,7 +315,58 @@ class LaporanController extends Controller
 
         $laporan->save();
 
-        return redirect()->route('laporan.index')->with('success', 'Laporan berhasil diapprove!');
+        return redirect()->route('laporan.checkBM')->with('success', 'Laporan berhasil diapprove!');
+    }
+
+    public function reject(String $id)
+    {
+        $laporan = Laporan::find($id);
+        $role = auth()->user()->Role->name;
+
+        if ($role == 'PIC') {
+            $laporan->pic = auth()->user()->id;
+            $laporan->pic_checked = true;
+            $laporan->pic_checked_at = now();
+            $laporan->pic_rejected = true;
+            $laporan->pic_rejected_reason = request()->reason;
+        } elseif ($role == 'BM') {
+            $laporan->branch_manager = auth()->user()->id;
+            $laporan->branch_manager_checked = true;
+            $laporan->branch_manager_checked_at = now();
+            $laporan->branch_manager_rejected = true;
+            $laporan->branch_manager_rejected_reason = request()->reason;
+        } elseif ($role == 'DPnP') {
+            $laporan->dpnp = auth()->user()->id;
+            $laporan->dpnp_checked = true;
+            $laporan->dpnp_checked_at = now();
+            $laporan->dpnp_rejected = true;
+            $laporan->dpnp_rejected_reason = request()->reason;
+        }
+
+        $laporan->save();
+
+        // Route to different page based on role
+        // ./$role/laporan page
+
+        return redirect()->route('laporan.check' . $role)->with('success', 'Laporan berhasil direject!');
+    }
+
+    public function getRevisiStaff(String $role)
+    {
+        if ($role === 'pic') {
+            $laporan = Laporan::where('pic', auth()->user()->id)
+                ->where(function ($query) {
+                    $query->where('branch_manager_rejected', true)
+                        ->orWhere('dpnp_rejected', true);
+                })
+                ->get();
+        } elseif ($role === 'bm') {
+            $laporan = Laporan::where('branch_manager', auth()->user()->id)
+                ->where('dpnp_rejected', true)
+                ->get();
+        }
+
+        return view('revisi', compact('laporan'));
     }
 
 
@@ -280,9 +376,71 @@ class LaporanController extends Controller
      * @param  \App\Models\Laporan  $laporan
      * @return \Illuminate\Http\Response
      */
-    public function edit(Laporan $laporan)
+    public function revisi(String $id)
     {
-        //
+        $laporan = Laporan::find($id);
+
+        $laporan->lokasi = request()->lokasi ?? $laporan->lokasi;
+        $laporan->kategori = request()->kategori ?? $laporan->kategori;
+        $laporan->kategori_lain = request()->kategori_lain ?? $laporan->kategori_lain;
+        $laporan->deskripsi = request()->deskripsi ?? $laporan->deskripsi;
+
+        if (request()->hasFile('image')) {
+            File::delete(storage_path($laporan->image));
+
+            $filePath = request()->file('image')
+                ->storeAs('image', time() . '_' . $laporan->lokasi . '_' . auth()->user()->name . '.' . request()->image->extension(), 'public');
+            $laporan->image = $filePath;
+        }
+
+        if ($laporan->pic_rejected) {
+            $laporan->pic_checked = false;
+            $laporan->pic_checked_at = null;
+            $laporan->pic_rejected = false;
+            $laporan->pic_rejected_reason = null;
+
+            $laporan->branch_manager_checked = false;
+            $laporan->branch_manager_checked = false;
+            $laporan->branch_manager_checked_at = null;
+            $laporan->branch_manager_rejected = false;
+            $laporan->branch_manager_rejected_reason = null;
+
+            $laporan->dpnp_checked = false;
+            $laporan->dpnp_checked_at = null;
+            $laporan->dpnp_rejected = false;
+            $laporan->dpnp_rejected_reason = null;
+        }
+
+        if ($laporan->branch_manager_rejected) {
+            $laporan->branch_manager_checked = false;
+            $laporan->branch_manager_checked_at = null;
+            $laporan->branch_manager_rejected = false;
+            $laporan->branch_manager_rejected_reason = null;
+
+            $laporan->dpnp_checked = false;
+            $laporan->dpnp_checked_at = null;
+            $laporan->dpnp_rejected = false;
+            $laporan->dpnp_rejected_reason = null;
+
+            $laporan->pic = auth()->user()->id;
+            $laporan->pic_checked = true;
+            $laporan->pic_checked_at = now();
+        }
+
+        if ($laporan->dpnp_rejected) {
+            $laporan->dpnp_checked = false;
+            $laporan->dpnp_checked_at = null;
+            $laporan->dpnp_rejected = false;
+            $laporan->dpnp_rejected_reason = null;
+
+            $laporan->pic = auth()->user()->id;
+            $laporan->pic_checked = true;
+            $laporan->pic_checked_at = now();
+        }
+
+        $laporan->save();
+
+        return redirect()->route('laporan.index')->with('success', 'Laporan berhasil direvisi!');
     }
 
     /**

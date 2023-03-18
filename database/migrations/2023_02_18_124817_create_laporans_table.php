@@ -46,6 +46,8 @@ return new class extends Migration
             $table->foreignId('dpnp')->nullable();
 
             $table->boolean('completed')->default(false);
+            $table->timestamp('completed_at')->nullable();
+            $table->foreignId('completed_by')->nullable();
             $table->string('completed_image')->nullable();
             $table->timestamps();
         });

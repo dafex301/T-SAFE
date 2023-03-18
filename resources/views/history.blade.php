@@ -47,6 +47,12 @@
                                                     <td>
                                                         @if ($l->completed)
                                                             <span class="badge text-bg-success">Selesai</span>
+                                                        @elseif ($l->pic_rejected)
+                                                            <span class="badge text-bg-danger">Ditolak PIC</span>
+                                                        @elseif ($l->bm_rejected)
+                                                            <span class="badge text-bg-danger">Ditolak BM</span>
+                                                        @elseif ($l->dpnp_rejected)
+                                                            <span class="badge text-bg-danger">Ditolak DPnP</span>
                                                         @elseif ($l->branch_manager_checked)
                                                             <span class="badge text-bg-info">Diproses DPnP</span>
                                                         @elseif ($l->pic_checked)
