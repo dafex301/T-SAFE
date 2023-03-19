@@ -56,6 +56,7 @@ class LaporanController extends Controller
         $user = auth()->user();
 
         $laporan = Laporan::where('pic_checked', true)
+            ->where('branch_manager_checked', false)
             ->where('pic_rejected', false)
             ->where('dpnp_checked', false)
             ->where('completed', false)
@@ -96,6 +97,7 @@ class LaporanController extends Controller
     {
         $user = auth()->user();
         $role = $user->Role->name;
+
 
         if ($role == 'DPnP') {
             $laporan = Laporan::orderBy('updated_at', 'desc')
@@ -174,23 +176,38 @@ class LaporanController extends Controller
      */
     public function show(String $id)
     {
-        try {
+        $laporan = Laporan::find($id);
 
-            $role = auth()->user()->Role->name;
-            $laporan = Laporan::find($id);
-
-            if (!$laporan->completed && $role == 'Staff' && $laporan->pelapor != auth()->user()->id) {
-                throw new \Throwable();
-            }
-
-            return view('detail', [
-                'laporan' => $laporan,
-                'kategori' => Kategori::all()
-            ]);
-        } catch (\Throwable $th) {
-            return redirect()->route('laporan.index')->with('error', 'Anda tidak dapat mengakses laporan ini!');
-        }
+        return view('detail', [
+            'laporan' => $laporan,
+            'kategori' => Kategori::all()
+        ]);
     }
+
+
+    /**
+     * Display the specified resource and role.
+     *
+     * @param  \App\Models\Laporan  $laporan
+     * @return \Illuminate\Http\Response
+     */
+    public function detailRole(String $role, String $id)
+    {
+        $loginRole = strtolower(auth()->user()->Role->name);
+
+        if ($loginRole != $role) {
+            return redirect()->route('laporan.index')->with('error', 'Anda tidak memiliki akses!');
+        }
+
+        $laporan = Laporan::find($id);
+
+        return view('detail', [
+            'laporan' => $laporan,
+            'kategori' => Kategori::all()
+        ]);
+    }
+
+
 
     /**
      * Display the specified resource.
@@ -254,15 +271,18 @@ class LaporanController extends Controller
             $laporan->pic_checked = true;
             $laporan->pic_checked_at = now();
         }
+        if (auth()->user()->Role->name === 'DPnP') {
+            $laporan->dpnp = auth()->user()->id;
+            $laporan->dpnp_checked = true;
+            $laporan->dpnp_checked_at = now();
+        }
 
         $laporan->completed = true;
-        $laporan->dpnp_checked_at = now();
-        $laporan->dpnp = auth()->user()->id;
         $laporan->completed_image = $filePath;
 
         $laporan->save();
 
-        return redirect()->route('laporan.index')->with('success', 'Laporan berhasil diubah!');
+        return redirect()->route('laporan.history')->with('success', 'Laporan berhasil diubah!');
     }
 
     /**
@@ -428,6 +448,11 @@ class LaporanController extends Controller
         }
 
         if ($laporan->dpnp_rejected) {
+            $laporan->branch_manager_checked = false;
+            $laporan->branch_manager_checked_at = null;
+            $laporan->branch_manager_rejected = false;
+            $laporan->branch_manager_rejected_reason = null;
+
             $laporan->dpnp_checked = false;
             $laporan->dpnp_checked_at = null;
             $laporan->dpnp_rejected = false;

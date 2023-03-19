@@ -48,7 +48,7 @@
                                             <label class="form-label" for="pelapor">Pelapor</label>
                                             <input class="form-control" id="pelapor" type="text" name="pelapor"
                                                 disabled value="{{ $laporan->Pelapor->name }}">
-                                            @error('tanggal')
+                                            @error('pelapor')
                                                 <div class="text-danger">
                                                     {{ $message }}
                                                 </div>
@@ -68,7 +68,8 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="lokasi">Lokasi</label>
                                             <input class="form-control" id="lokasi" type="text" name="lokasi"
-                                                placeholder="" value="{{ old('lokasi') ?? ($laporan->lokasi ?? '') }}">
+                                                placeholder="" value="{{ old('lokasi') ?? ($laporan->lokasi ?? '') }}"
+                                                @if (Str::startsWith(Request::path(), 'bm/laporan')) disabled @endif>
                                             @error('lokasi')
                                                 <div class="text-danger">
                                                     {{ $message }}
@@ -78,7 +79,8 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="jenis">Jenis / Kategori Potensi
                                                 Bahaya</label>
-                                            <select class="form-select" aria-label="jenis" id="jenis" name="kategori">
+                                            <select class="form-select" aria-label="jenis" id="jenis" name="kategori"
+                                                @if (Str::startsWith(Request::path(), 'bm/laporan')) disabled @endif>
                                                 <option value="">Pilih Jenis / Kategori</option>
                                                 {{-- Foreach kategori --}}
                                                 @foreach ($kategori as $item)
@@ -105,7 +107,7 @@
                                         <div class="mb-3" id="jenis-lain-container" style="display: none">
                                             <label class="form-label" for="jenis-lain">Jenis / Kategori</label>
                                             <input class="form-control" name="kategori_lain" id="jenis-lain" type="text"
-                                                placeholder=""
+                                                @if (Str::startsWith(Request::path(), 'bm/laporan')) disabled @endif placeholder=""
                                                 value="{{ old('kategori_lain') ?? ($laporan->kategori_lain ?? '') }}">
                                             @error('kategori_lain')
                                                 <div class="text-danger">
@@ -117,7 +119,8 @@
                                             <label class="form-label" for="deskripsi">Deskripsi</label>
                                             <input class="form-control" id="deskripsi" type="text" placeholder=""
                                                 name="deskripsi"
-                                                value="{{ old('deskripsi') ?? ($laporan->deskripsi ?? '') }}">
+                                                value="{{ old('deskripsi') ?? ($laporan->deskripsi ?? '') }}"
+                                                @if (Str::startsWith(Request::path(), 'bm/laporan')) disabled @endif>
                                             @error('deskripsi')
                                                 <div class="text-danger">
                                                     {{ $message }}
@@ -143,11 +146,7 @@
                                         <button type="submit" hidden id="verifikasi-laporan-submit">Tutup
                                             Laporan</button>
 
-                                        {{-- @yield('buttons') --}}
-                                        @if (
-                                            (auth()->user()->Role->name === 'PIC' && !$laporan->pic_checked) ||
-                                                (auth()->user()->Role->name === 'DPnP' && !$laporan->dpnp_checked) ||
-                                                ($laporan->immediate_action && $laporan->prevention))
+                                        @if (Str::startsWith(Request::path(), 'pic/laporan') || Str::startsWith(Request::path(), 'dpnp/laporan'))
                                             <div class="mb-3">
                                                 <label class="form-label" for="immediate_action">Immediate Action</label>
                                                 <input class="form-control" id="immediate_action" name="immediate_action"
@@ -174,34 +173,32 @@
                                         @endif
 
                                         <div class="mb-3 mt-4">
-                                            {{-- TODO --}}
-                                            @if ($laporan->pic_checked && !$laporan->pic_rejected && !$laporan->dpnp_checked && $laporan->branch_manager_checked)
-                                                @if (!$laporan->bm_rejected && !$laporan->dpnp_rejected && !$laporan->pic_rejected)
-                                                    <button class="btn btn-success " type="button"
-                                                        data-bs-toggle="modal" data-bs-target="#tutupModal">Tutup
-                                                        Laporan</button>
-                                                    @if (auth()->user()->Role->name === 'PIC')
-                                                        <button class="btn btn-warning " type="button"
-                                                            data-bs-toggle="modal" data-bs-target="#tindakModal">Tindak
-                                                            Lanjut</button>
-                                                    @endif
-                                                @endif
-                                                @if (
-                                                    (auth()->user()->id === $laporan->pic && $laporan->dpnp_rejected) ||
-                                                        (auth()->user()->id === $laporan->pelapor && $laporan->pic_rejected))
-                                                    <button class="btn btn-success " type="button"
-                                                        data-bs-toggle="modal" data-bs-target="#revisiModal">Revisi
-                                                        Laporan</button>
-                                                @endif
-                                                @if (auth()->user()->id === $laporan->pelapor && !$laporan->pic_rejected)
-                                                    <button class="btn btn-danger" type="button" data-bs-toggle="modal"
-                                                        data-bs-target="#tolakModal">Tolak
-                                                        Laporan</button>
-                                                @endif
-
-
+                                            @if (Str::startswith(Request::path(), 'pic/laporan') || Str::startswith(Request::path(), 'dpnp/laporan'))
+                                                <button class="btn btn-success " type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#tutupModal">Tutup
+                                                    Laporan</button>
+                                            @endif
+                                            @if (Str::startswith(Request::path(), 'pic/laporan'))
+                                                <button class="btn btn-warning " type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#tindakModal">Tindak
+                                                    Lanjut</button>
+                                            @endif
+                                            @if (Str::contains(Request::path(), 'revisi'))
+                                                <button class="btn btn-success " type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#revisiModal">Revisi
+                                                    Laporan</button>
+                                            @endif
+                                            @if (Str::startswith(Request::path(), 'bm/laporan'))
+                                                <button class="btn btn-success " type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#approveModal">Approve
+                                                    Laporan</button>
+                                            @endif
+                                            @if (Str::contains(Request::path(), '/laporan'))
+                                                <button class="btn btn-danger" type="button" data-bs-toggle="modal"
+                                                    data-bs-target="#tolakModal">Tolak
+                                                    Laporan</button>
+                                            @endif
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -315,6 +312,31 @@
         </div>
     </div>
     {{-- End of Revisi Modal --}}
+
+    <!-- Approve Modal -->
+    <div class="modal fade" id="approveModal" tabindex="-1" aria-labelledby="approveModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="approveModalLabel">Approve Laporan</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body d-flex flex-column justify-content-center align-items-center">
+                    <img src="{{ url('assets/img/accept.jpeg') }}" alt="Approve" srcset=""
+                        class="img-fluid w-25 mb-2">
+                    <h5 class="text-center">Apakah anda yakin untuk <i>approve</i> laporan ini?</h5>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <form action="/approve/{{ $laporan->id }}" method="POST" id="approve-laporan-form">
+                        @csrf
+                        <button type="submit" class="btn btn-success">Approve</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End of Approve Modal -->
 
     {{-- Script --}}
     <script defer>

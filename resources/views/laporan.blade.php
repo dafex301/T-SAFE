@@ -85,8 +85,8 @@
                                                                 </button>
                                                             @endif
 
-                                                            @if ((auth()->user()->id === $l->pelapor && $l->pic_rejected) || Request::path() !== 'laporan')
-                                                                <a href="/detail/{{ $l->id }}"
+                                                            @if ($l->pic_rejected)
+                                                                <a href="/revisi/{{ $l->id }}"
                                                                     class="btn btn-outline-success">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                         viewBox="0 0 24 24" stroke-width="1.5"
@@ -96,6 +96,21 @@
                                                                     </svg>
                                                                 </a>
                                                             @endif
+
+                                                            @if (Str::startsWith(Request::path(), 'pic/') ||
+                                                                    Str::startsWith(Request::path(), 'bm/') ||
+                                                                    Str::startsWith(Request::path(), 'dpnp/'))
+                                                                <a href="/{{ Request::path() . '/' . $l->id }}"
+                                                                    class="btn btn-outline-success">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+                                                                        viewBox="0 0 24 24" stroke-width="1.5"
+                                                                        stroke="currentColor" style="height: 20px">
+                                                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                                                            d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" />
+                                                                    </svg>
+                                                                </a>
+                                                            @endif
+
 
                                                         </td>
                                                     </tr>

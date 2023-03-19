@@ -37,6 +37,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
         // Laporan Routes
         Route::get('/laporan', 'LaporanController@index')->name('laporan.index');
+        Route::get('/{role}/laporan/{id}', 'LaporanController@detailRole')->name('laporan.detailRole');
 
         // History Routes
         Route::get('/history', 'LaporanController@history')->name('laporan.history');
@@ -67,7 +68,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::get('/history', 'LaporanController@history')->name('laporan.history');
 
         // Revisi Routes
-        Route::get('/{role}/revisi/{id}', 'LaporanController@detailRevisi')->name('laporan.detailRevisi');
+        Route::get('/revisi/{id}', 'LaporanController@show')->name('laporan.show');
+        Route::get('/{role}/revisi/{id}', 'LaporanController@show')->name('laporan.show');
         Route::post('/revisi/{id}', 'LaporanController@revisi')->name('laporan.revisi');
         Route::get('/{role}/revisi', 'LaporanController@getRevisiStaff')->name('laporan.revisiStaff');
 
