@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Laporan;
 use App\Models\Kategori;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\StoreLaporanRequest;
 use App\Http\Requests\UpdateLaporanRequest;
@@ -278,6 +280,9 @@ class LaporanController extends Controller
         }
 
         $laporan->completed = true;
+        $laporan->completed_at = now();
+        $laporan->completed_by = auth()->user()->id;
+
         $laporan->completed_image = $filePath;
 
         $laporan->save();
@@ -466,6 +471,137 @@ class LaporanController extends Controller
         $laporan->save();
 
         return redirect()->route('laporan.index')->with('success', 'Laporan berhasil direvisi!');
+    }
+
+    public function printwordx(String $id)
+    {
+        $template_file_name = 'laporan.docx';
+        $template_file_path = public_path('docs\\' . $template_file_name);
+
+        $temp_output_folder = storage_path('app\\temp\\');
+        $temp_output_file_name = 'laporan_' . $id . '.docx';
+        $temp_output_file_path = $temp_output_folder . $temp_output_file_name;
+
+        try {
+            if (!file_exists($template_file_path)) {
+                throw new \Exception('Template file not found');
+            }
+
+            copy($template_file_path, $temp_output_file_path);
+
+
+            $zip_val = new \ZipArchive();
+
+            if ($zip_val->open($temp_output_file_path) === true) {
+                $xml_val = $zip_val->getFromName('word/document.xml');
+
+                $laporan = Laporan::find($id);
+
+                $xml_val = str_replace('{lokasi}', $laporan->lokasi, $xml_val);
+                $xml_val = str_replace('{deskripsi}', $laporan->deskripsi, $xml_val);
+
+                $zip_val->addFromString('word/document.xml', $xml_val);
+                $zip_val->close();
+
+                // Convert to PDF
+                $domPdfPath = base_path('vendor/dompdf/dompdf');
+                \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
+                \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
+
+                $phpWord = \PhpOffice\PhpWord\IOFactory::load($temp_output_file_path);
+                $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'PDF');
+
+                $temp_output_file_name = 'laporan_' . $id . '.pdf';
+                $temp_output_file_path = $temp_output_folder . $temp_output_file_name;
+
+                return response()->download($temp_output_file_path)->deleteFileAfterSend(true);
+
+
+
+                // $phpWord = \PhpOffice\PhpWord\IOFactory::load($temp_output_file_path);
+                // $xmlWriter = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'PDF');
+
+
+
+                // $temp_output_file_name = 'laporan_' . $id . '.pdf';
+                // $temp_output_file_path = $temp_output_folder . $temp_output_file_name;
+
+                // return response()->download($temp_output_file_path)->deleteFileAfterSend(true);
+            }
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
+    public function printpdfx(String $id)
+    {
+        $laporan = Laporan::find($id);
+
+        $name = $laporan->Pelapor->name;
+
+        /* Set the PDF Engine Renderer Path */
+        $domPdfPath = base_path('vendor/dompdf/dompdf');
+        \PhpOffice\PhpWord\Settings::setPdfRendererPath($domPdfPath);
+        \PhpOffice\PhpWord\Settings::setPdfRendererName('DomPDF');
+
+        /*@ Reading doc file */
+        $template = new \PhpOffice\PhpWord\TemplateProcessor(public_path('docs\\laporan.docx'));
+
+        /*@ Replacing variables in doc file */
+        $template->setValue('{nama}', $name);
+        // $template->setValue('{nik}', $laporan->Pelapor->nik);
+        $template->setValue('{cabang}', $laporan->Cabang->name);
+        $template->setValue('{tanggal}', $laporan->tanggal);
+
+        $template->setValue('{deskripsi}', $laporan->deskripsi);
+        $template->setValue('{kategori}', $laporan->kategori ? $laporan->Kategori->name : $laporan->kategori_lain);
+        $template->setValue('{evidence}', $laporan->image);
+
+        $template->setValue('{immediate_action}', $laporan->immediate_action);
+        $template->setValue('{prevention}', $laporan->prevention);
+        $template->setValue('{completed_image}', $laporan->completed_image);
+
+        $template->setValue('{date_now}', date('d-m-Y'));
+
+        /*@ Save Temporary Word File With New Name */
+        $saveDocPath = public_path('docs\\laporan_' . $laporan->id . '.docx');
+        $template->saveAs($saveDocPath);
+
+        // Load temporarily create word file
+        $Content = \PhpOffice\PhpWord\IOFactory::load($saveDocPath);
+
+        //Save it into PDF
+        $savePdfPath = public_path('docs\\laporan_' . $laporan->id . '.pdf');
+
+        /*@ If already PDF exists then delete it */
+        if (file_exists($savePdfPath)) {
+            unlink($savePdfPath);
+        }
+
+        //Save it into PDF
+        $PDFWriter = \PhpOffice\PhpWord\IOFactory::createWriter($Content, 'PDF');
+        $PDFWriter->save($savePdfPath);
+        // echo 'File has been successfully converted';
+
+        /*@ Remove temporarily created word file */
+        if (file_exists($saveDocPath)) {
+            unlink($saveDocPath);
+        }
+
+        // Open PDF file
+        return response()->download($savePdfPath)->deleteFileAfterSend(true);
+    }
+
+    public function printPDF(String $id)
+    {
+        $laporan = Laporan::find($id);
+
+        // Convert $laporan->completed_at datetime to local date dd-mm-yyyy
+        $laporan->completed_at = Carbon::parse($laporan->completed_at)->format('d-m-Y');
+
+        $pdf = PDF::loadView('print', compact('laporan'));
+
+        return $pdf->download('laporan_' . $laporan->id . '.pdf');
     }
 
     /**

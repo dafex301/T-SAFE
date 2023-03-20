@@ -60,10 +60,15 @@ class Laporan extends Model
         return $this->belongsTo(User::class, 'branch_manager');
     }
 
-    // Completed by
+    // DPnP
     public function DPNP()
     {
         return $this->belongsTo(User::class, 'dpnp');
+    }
+
+    public function Completed_By()
+    {
+        return $this->belongsTo(User::class, 'completed_by');
     }
 
     // Cabang

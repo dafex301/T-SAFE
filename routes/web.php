@@ -73,9 +73,15 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::post('/revisi/{id}', 'LaporanController@revisi')->name('laporan.revisi');
         Route::get('/{role}/revisi', 'LaporanController@getRevisiStaff')->name('laporan.revisiStaff');
 
+        // Print Routes
+        Route::get('/print/{id}', 'LaporanController@printpdf')->name('laporan.print');
 
         // Logout Routes
         Route::get('/logout', 'LogoutController@perform')->name('logout.perform');
+
+        Route::get('/print', function () {
+            return view('print2');
+        })->name('print');
     });
 
     // Admin Routes
