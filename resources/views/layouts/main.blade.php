@@ -344,89 +344,111 @@
             // Button that triggered the modal
             const button = event.relatedTarget
             // Extract info from data-bs-* attributes
-            const image = button.getAttribute('data-bs-whatever')
-            // If necessary, you could initiate an AJAX request here
-            // and then do the updating in a callback.
-            //
-            // Update the modal's content.
+            // convert image to json
+            const images = JSON.parse(button.getAttribute('data-bs-whatever'))
+
+            // foreach images, create image tag
+            let image = ''
+            images.forEach(img => {
+                image += `<img src="/storage/${img.image}" class="img-fluid" alt="Responsive image">`
+            });
+
+            // Update the modal content
             const modalBody = imageModal.querySelector('.modal-body')
-            modalBody.innerHTML = `<img src="/storage/${image}" class="img-fluid" alt="Responsive image">`
+            modalBody.innerHTML = image
+
         })
     </script>
 
     <!-- Upload Preview -->
     <script>
         // When upload image, show preview, keep the ratio to original
+        // show preview of multiple image
         $('#dokumentasi').change(function() {
-            console.log('test2');
-            var file = this.files[0];
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                var img = new Image();
-                img.src = e.target.result;
-                img.onload = function() {
-                    var canvas = document.createElement('canvas');
-                    var ctx = canvas.getContext('2d');
-                    var MAX_WIDTH = 300;
-                    var MAX_HEIGHT = 300;
-                    var width = img.width;
-                    var height = img.height;
-                    if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
+            // clean the img-container
+            $('#img-container').html('');
+            // count how many image
+            var count = this.files.length;
+            // show all images
+            for (var i = 0; i < count; i++) {
+                var file = this.files[i];
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        var canvas = document.createElement('canvas');
+                        var ctx = canvas.getContext('2d');
+                        var MAX_WIDTH = 300;
+                        var MAX_HEIGHT = 300;
+                        var width = img.width;
+                        var height = img.height;
+                        if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height *= MAX_WIDTH / width;
+                                width = MAX_WIDTH;
+                            }
+                        } else {
+                            if (height > MAX_HEIGHT) {
+                                width *= MAX_HEIGHT / height;
+                                height = MAX_HEIGHT;
+                            }
                         }
-                    } else {
-                        if (height > MAX_HEIGHT) {
-                            width *= MAX_HEIGHT / height;
-                            height = MAX_HEIGHT;
-                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+                        var dataurl = canvas.toDataURL('image/png');
+                        $('.img-container').append('<img src="' + dataurl +
+                            '" class="img-fluid" alt="Responsive image">');
                     }
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
-                    var dataurl = canvas.toDataURL('image/png');
-                    $('.img-container').html('<img src="' + dataurl +
-                        '" class="img-fluid" alt="Responsive image">');
                 }
+                reader.readAsDataURL(file);
             }
-            reader.readAsDataURL(file);
+
+
         });
 
+
         $('#completed-image').change(function() {
-            console.log('test');
-            var file = this.files[0];
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                var img = new Image();
-                img.src = e.target.result;
-                img.onload = function() {
-                    var canvas = document.createElement('canvas');
-                    var ctx = canvas.getContext('2d');
-                    var MAX_WIDTH = 300;
-                    var MAX_HEIGHT = 300;
-                    var width = img.width;
-                    var height = img.height;
-                    if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
+            // clean the .img-container-2
+            $('.img-container-2').empty();
+            // count how many image
+            var count = this.files.length;
+            // show all images
+            for (var i = 0; i < count; i++) {
+                var file = this.files[i];
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var img = new Image();
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        var canvas = document.createElement('canvas');
+                        var ctx = canvas.getContext('2d');
+                        var MAX_WIDTH = 300;
+                        var MAX_HEIGHT = 300;
+                        var width = img.width;
+                        var height = img.height;
+                        if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height *= MAX_WIDTH / width;
+                                width = MAX_WIDTH;
+                            }
+                        } else {
+                            if (height > MAX_HEIGHT) {
+                                width *= MAX_HEIGHT / height;
+                                height = MAX_HEIGHT;
+                            }
                         }
-                    } else {
-                        if (height > MAX_HEIGHT) {
-                            width *= MAX_HEIGHT / height;
-                            height = MAX_HEIGHT;
-                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+                        var dataurl = canvas.toDataURL('image/png');
+                        $('.img-container-2').append('<img src="' + dataurl +
+                            '" class="img-fluid" alt="Responsive image">');
                     }
-                    canvas.width = width;
-                    canvas.height = height;
-                    ctx.drawImage(img, 0, 0, width, height);
-                    var dataurl = canvas.toDataURL('image/png');
-                    $('.img-container-2').html('<img src="' + dataurl +
-                        '" class="img-fluid" alt="Responsive image">');
                 }
+                reader.readAsDataURL(file);
             }
-            reader.readAsDataURL(file);
         });
     </script>
 

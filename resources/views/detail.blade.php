@@ -129,79 +129,84 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="image">Dokumentasi</label>
-                                            <div class="img-container mb-2"><img src="/storage/{{ $laporan->image }}"
-                                                    alt="Dokumentasi" class="img-fluid col-lg-8" srcset=""></div>
-                                            @if ($laporan->pic_rejected || $laporan->branch_manager_rejected || $laporan->dpnp_rejected)
-                                                <input type="file" id="dokumentasi" class="form-control"
-                                                    accept="image/*" capture="camera" value="{{ old('image') }}"
-                                                    name="image">
-                                            @endif
-                                            @error('image')
-                                                <div class="text-danger">
-                                                    {{ $message }}
+                                            <div class="img-container mb-2">
+                                                @foreach ($laporan->DokumentasiLaporan as $item)
+                                                    <img src="/storage/{{ $item->image }}" alt="Dokumentasi"
+                                                        class="img-fluid col-lg-4" srcset="">
+                                                @endforeach
+                                                @if ($laporan->pic_rejected || $laporan->branch_manager_rejected || $laporan->dpnp_rejected)
+                                                    <input type="file" id="dokumentasi" class="form-control"
+                                                        accept="image/*" capture="camera" value="{{ old('image') }}"
+                                                        name="image">
+                                                @endif
+                                                @error('image')
+                                                    <div class="text-danger">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+
+                                            <button type="submit" hidden id="verifikasi-laporan-submit">Tutup
+                                                Laporan</button>
+
+                                            @if (Str::startsWith(Request::path(), 'pic/laporan') || Str::startsWith(Request::path(), 'dpnp/laporan'))
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="immediate_action">Immediate
+                                                        Action</label>
+                                                    <input class="form-control" id="immediate_action"
+                                                        name="immediate_action" type="text" placeholder=""
+                                                        value="{{ old('immediate_action') ?? ($laporan->immediate_action ?? '') }}">
+                                                    <div class="text-danger" id="immediate_action-error"></div>
                                                 </div>
-                                            @enderror
-                                        </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="prevention">Pencegahan /
+                                                        Perbaikan</label>
+                                                    <input class="form-control" id="prevention" name="prevention"
+                                                        type="text" placeholder=""
+                                                        value="{{ old('prevention') ?? ($laporan->prevention ?? '') }}">
+                                                    <div class="text-danger" id="prevention-error"></div>
+                                                </div>
 
-                                        <button type="submit" hidden id="verifikasi-laporan-submit">Tutup
-                                            Laporan</button>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="completed-image">Evidence Pencegahan /
+                                                        Perbaikan</label>
+                                                    <div class="img-container-2 mb-2"></div>
+                                                    <input type="file" id="completed-image" name="completed_image[]"
+                                                        multiple class="form-control" accept="image/*" capture="camera">
+                                                    <div class="text-danger" id="completed_image-error"></div>
+                                                </div>
+                                            @endif
 
-                                        @if (Str::startsWith(Request::path(), 'pic/laporan') || Str::startsWith(Request::path(), 'dpnp/laporan'))
-                                            <div class="mb-3">
-                                                <label class="form-label" for="immediate_action">Immediate Action</label>
-                                                <input class="form-control" id="immediate_action" name="immediate_action"
-                                                    type="text" placeholder=""
-                                                    value="{{ old('immediate_action') ?? ($laporan->immediate_action ?? '') }}">
-                                                <div class="text-danger" id="immediate_action-error"></div>
+                                            <div class="mb-3 mt-4">
+                                                @if (Str::startswith(Request::path(), 'pic/laporan') || Str::startswith(Request::path(), 'dpnp/laporan'))
+                                                    <button class="btn btn-success " type="button"
+                                                        data-bs-toggle="modal" data-bs-target="#tutupModal">Tutup
+                                                        Laporan</button>
+                                                @endif
+                                                @if (Str::startswith(Request::path(), 'pic/laporan'))
+                                                    <button class="btn btn-warning " type="button"
+                                                        data-bs-toggle="modal" data-bs-target="#tindakModal">Tindak
+                                                        Lanjut</button>
+                                                @endif
+                                                @if (Str::contains(Request::path(), 'revisi'))
+                                                    <button class="btn btn-success " type="button"
+                                                        data-bs-toggle="modal" data-bs-target="#revisiModal">Revisi
+                                                        Laporan</button>
+                                                @endif
+                                                @if (Str::startswith(Request::path(), 'bm/laporan'))
+                                                    <button class="btn btn-success " type="button"
+                                                        data-bs-toggle="modal" data-bs-target="#approveModal">Approve
+                                                        Laporan</button>
+                                                @endif
+                                                @if (Str::contains(Request::path(), '/laporan'))
+                                                    <button class="btn btn-danger" type="button" data-bs-toggle="modal"
+                                                        data-bs-target="#tolakModal">Tolak
+                                                        Laporan</button>
+                                                @endif
                                             </div>
-                                            <div class="mb-3">
-                                                <label class="form-label" for="prevention">Pencegahan / Perbaikan</label>
-                                                <input class="form-control" id="prevention" name="prevention"
-                                                    type="text" placeholder=""
-                                                    value="{{ old('prevention') ?? ($laporan->prevention ?? '') }}">
-                                                <div class="text-danger" id="prevention-error"></div>
-                                            </div>
-
-                                            <div class="mb-3">
-                                                <label class="form-label" for="completed-image">Evidence Pencegahan /
-                                                    Perbaikan</label>
-                                                <div class="img-container-2 mb-2"></div>
-                                                <input type="file" id="completed-image" name="completed_image"
-                                                    class="form-control" accept="image/*" capture="camera">
-                                                <div class="text-danger" id="completed_image-error"></div>
-                                            </div>
-                                        @endif
-
-                                        <div class="mb-3 mt-4">
-                                            @if (Str::startswith(Request::path(), 'pic/laporan') || Str::startswith(Request::path(), 'dpnp/laporan'))
-                                                <button class="btn btn-success " type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#tutupModal">Tutup
-                                                    Laporan</button>
-                                            @endif
-                                            @if (Str::startswith(Request::path(), 'pic/laporan'))
-                                                <button class="btn btn-warning " type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#tindakModal">Tindak
-                                                    Lanjut</button>
-                                            @endif
-                                            @if (Str::contains(Request::path(), 'revisi'))
-                                                <button class="btn btn-success " type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#revisiModal">Revisi
-                                                    Laporan</button>
-                                            @endif
-                                            @if (Str::startswith(Request::path(), 'bm/laporan'))
-                                                <button class="btn btn-success " type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#approveModal">Approve
-                                                    Laporan</button>
-                                            @endif
-                                            @if (Str::contains(Request::path(), '/laporan'))
-                                                <button class="btn btn-danger" type="button" data-bs-toggle="modal"
-                                                    data-bs-target="#tolakModal">Tolak
-                                                    Laporan</button>
-                                            @endif
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </form>
 
                     </div>
@@ -215,7 +220,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="tutupModalLabel">Tutup Laporan</h1>
+                    <h1 class="modal-title fs-5" id="tutupModalLabel">Selesai</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
                         id="cancelModal"></button>
                 </div>

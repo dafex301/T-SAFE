@@ -22,7 +22,6 @@ return new class extends Migration
             $table->foreignId('kategori');
             $table->string('kategori_lain')->nullable();
             $table->string('deskripsi');
-            $table->string('image');
 
             $table->string('immediate_action')->nullable();
             $table->string('prevention')->nullable();
@@ -48,7 +47,6 @@ return new class extends Migration
             $table->boolean('completed')->default(false);
             $table->timestamp('completed_at')->nullable();
             $table->foreignId('completed_by')->nullable();
-            $table->string('completed_image')->nullable();
             $table->timestamps();
         });
     }

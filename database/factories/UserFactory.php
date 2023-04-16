@@ -19,6 +19,8 @@ class UserFactory extends Factory
     {
         return [
             'name' => fake()->name(),
+            // nik create a random number with 8 digits
+            'nik' => fake()->unique()->numberBetween(10000000, 99999999),
             'username' => fake()->unique()->userName(),
             'role' => 2,
             'email' => fake()->unique()->safeEmail(),

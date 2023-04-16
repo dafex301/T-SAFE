@@ -87,7 +87,8 @@
                                             <label class="form-label" for="image">Dokumentasi</label>
                                             <div class="img-container mb-2"></div>
                                             <input type="file" id="dokumentasi" class="form-control" accept="image/*"
-                                                capture="camera" value="{{ old('image') }}" name="image">
+                                                capture="camera" value="{{ old('image') }}" name="image[]" multiple
+                                                required>
                                             @error('image')
                                                 <div class="text-danger">
                                                     {{ $message }}

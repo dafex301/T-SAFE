@@ -25,7 +25,9 @@
     </header>
     <center>
         <h3>RESUME PELAPORAN</h3>
-        <p>No: .......................</p>
+        {{-- No: RSM-id with 3 digits such as 002 --}}
+        {{-- Date monthyear such as 042023 --}}
+        <p>No: RSM-{{ str_pad($laporan->id, 3, '0', STR_PAD_LEFT) }}/CU.04/{{ date('mY') }}</p>
     </center>
     <table>
         <tr>
@@ -36,7 +38,7 @@
         <tr>
             <td>NIK</td>
             <td>:</td>
-            <td>nik</td>
+            <td>{{ $laporan->Pelapor->nik }}</td>
         </tr>
         <tr>
             <td>Cabang</td>
@@ -58,8 +60,12 @@
         <p style="font-weight: 800">Potensi Bahaya Kategori</p>
         <p>{{ $laporan->kategori ? $laporan->Kategori->name : $laporan->kategori_lain }}</p>
         <p style="font-weight: 800">Evidence</p>
-        <img src="{{ url('storage/' . $laporan->image) }}" alt="Evidence" height="200px">
+        @foreach ($laporan->DokumentasiLaporan as $dokumentasi)
+            <img src="{{ url('storage/' . $dokumentasi->image) }}" alt="Evidence" height="200px">
+        @endforeach
     </div>
+    <br>
+    <br>
     <p style="font-weight: 800">TINDAK LANJUT</p>
     <div style="border: 1px solid black; padding: 10px">
         <p style="font-weight: 800">Immediate Action</p>
@@ -67,15 +73,24 @@
         <p style="font-weight: 800">Prevention</p>
         <p>{{ $laporan->prevention }}</p>
         <p style="font-weight: 800">Evidence</p>
-        <img src="{{ url('storage/' . $laporan->completed_image) }}" alt="Evidence" height="200px">
+        @foreach ($laporan->DokumentasiSelesai as $dokumentasi)
+            <img src="{{ url('storage/' . $dokumentasi->image) }}" alt="Evidence" height="200px">
+        @endforeach
     </div>
     <div style="text-align: right">
         <p>{{ $laporan->Cabang->name }}, {{ $laporan->completed_at }}</p>
         <div style="height: 70px;"></div>
         <p>{{ $laporan->Completed_By->name }}</p>
-        <p>{nik}</p>
+        <p>{{ $laporan->Completed_By->nik }}</p>
     </div>
     <p>Dicetak pada: {{ now() }}</p>
+
+    {{-- Print when page is loaded --}}
+    <script>
+        window.onload = function() {
+            window.print();
+        }
+    </script>
 
 </body>
 

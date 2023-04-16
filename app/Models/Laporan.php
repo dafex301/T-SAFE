@@ -76,4 +76,16 @@ class Laporan extends Model
     {
         return $this->belongsTo(Cabang::class, 'cabang');
     }
+
+    // DokumentasiLaporan
+    public function DokumentasiLaporan()
+    {
+        return $this->hasMany(DokumentasiLaporan::class);
+    }
+
+    // DokumentasiSelesai
+    public function DokumentasiSelesai()
+    {
+        return $this->hasMany(DokumentasiSelesai::class);
+    }
 }

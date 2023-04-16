@@ -6,9 +6,11 @@ use Carbon\Carbon;
 use App\Models\Laporan;
 use App\Models\Kategori;
 use Barryvdh\DomPDF\Facade\Pdf;
+use App\Models\DokumentasiLaporan;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\StoreLaporanRequest;
 use App\Http\Requests\UpdateLaporanRequest;
+use App\Models\DokumentasiSelesai;
 
 class LaporanController extends Controller
 {
@@ -104,6 +106,7 @@ class LaporanController extends Controller
         if ($role == 'DPnP') {
             $laporan = Laporan::orderBy('updated_at', 'desc')
                 ->where('dpnp_checked', true)
+                ->orWhere('dpnp_rejected', true)
                 ->get();
         } else {
             $laporan = Laporan::orderBy('updated_at', 'desc')
@@ -141,8 +144,8 @@ class LaporanController extends Controller
             'lokasi' => 'required|string',
             'kategori' => 'required',
             'deskripsi' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+
 
         // Check if kategori is 6 (Lain-lain)
         if ($request->kategori == '0') {
@@ -152,8 +155,20 @@ class LaporanController extends Controller
         }
 
         // Change the filename to current timestamp_lokasi_user.name before store to db
-        $filePath = $request->file('image')
-            ->storeAs('image', time() . '_' . $request->lokasi . '_' . auth()->user()->name . '.' . $request->image->extension(), 'public');
+        // Get all images from request
+        $images = $request->file('image');
+        $filePath = [];
+
+        // Loop through all images
+        foreach ($images as $image) {
+            // Change the filename to current timestamp_lokasi_user.name before store to db
+            // give an index to each image name
+            $index = array_search($image, $images);
+            $filename = Carbon::now()->timestamp . '_' . $request->lokasi . '_' . auth()->user()->name . '_' . $index . '.' . $image->getClientOriginalExtension();
+
+            // Store image to storage
+            $filePath[] = $image->storeAs('image', $filename, 'public');
+        }
 
         // Create new Laporan
         $laporan = Laporan::create([
@@ -164,8 +179,15 @@ class LaporanController extends Controller
             'kategori' => $request->kategori,
             'kategori_lain' => $request->kategori == 0 ? $request->kategori_lain : null,
             'deskripsi' => $request->deskripsi,
-            'image' => $filePath,
         ]);
+
+        // Store image to db, to table DokumentasiLaporan with laporan_id
+        foreach ($filePath as $path) {
+            DokumentasiLaporan::create([
+                'laporan_id' => $laporan->id,
+                'image' => $path,
+            ]);
+        }
 
         return redirect()->route('laporan.index')->with('success', 'Laporan berhasil dibuat!');
     }
@@ -245,8 +267,23 @@ class LaporanController extends Controller
             'deskripsi' => 'required|string',
             'immediate_action' => 'required|string',
             'prevention' => 'required|string',
-            'completed_image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+
+        // Change the filename to current timestamp_lokasi_user.name before store to db
+        // Get all images from request
+        $images = $request->file('completed_image');
+        $filePath = [];
+
+        // Loop through all images
+        foreach ($images as $image) {
+            // Change the filename to current timestamp_lokasi_user.name before store to db
+            // give an index to each image name
+            $index = array_search($image, $images);
+            $filename = Carbon::now()->timestamp . '_' . $request->lokasi . '_' . auth()->user()->name . '_' . $index . '.' . $image->getClientOriginalExtension();
+
+            // Store image to storage
+            $filePath[] = $image->storeAs('completed_image', $filename, 'public');
+        }
 
         // Check if kategori is 0 (Lain-lain)
         if ($request->kategori == '0') {
@@ -254,10 +291,6 @@ class LaporanController extends Controller
                 'kategori_lain' => 'required|string',
             ]);
         }
-
-        // Change the filename to current timestamp_lokasi_user.name before store to db
-        $filePath = $request->file('completed_image')
-            ->storeAs('completed_image', time() . '_' . $request->lokasi . '_' . auth()->user()->name . '.' . $request->completed_image->extension(), 'public');
 
         // Create new Laporan
         $laporan = Laporan::find($id);
@@ -283,9 +316,16 @@ class LaporanController extends Controller
         $laporan->completed_at = now();
         $laporan->completed_by = auth()->user()->id;
 
-        $laporan->completed_image = $filePath;
 
         $laporan->save();
+
+        // Store image to db, to table DokumentasiLaporan with laporan_id
+        foreach ($filePath as $path) {
+            DokumentasiSelesai::create([
+                'laporan_id' => $laporan->id,
+                'image' => $path,
+            ]);
+        }
 
         return redirect()->route('laporan.history')->with('success', 'Laporan berhasil diubah!');
     }
@@ -599,9 +639,11 @@ class LaporanController extends Controller
         // Convert $laporan->completed_at datetime to local date dd-mm-yyyy
         $laporan->completed_at = Carbon::parse($laporan->completed_at)->format('d-m-Y');
 
-        $pdf = PDF::loadView('print', compact('laporan'));
+        return view('print', compact('laporan'));
 
-        return $pdf->download('laporan_' . $laporan->id . '.pdf');
+        // $pdf = PDF::loadView('print', compact('laporan'));
+
+        // return $pdf->download('laporan_' . $laporan->id . '.pdf');
     }
 
     /**
