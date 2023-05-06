@@ -146,8 +146,9 @@
                                                 @enderror
                                             </div>
 
-                                            <button type="submit" hidden id="verifikasi-laporan-submit">Tutup
-                                                Laporan</button>
+                                            <button type="submit" hidden id="verifikasi-laporan-submit">
+                                                Selesai
+                                            </button>
 
                                             @if (Str::startsWith(Request::path(), 'pic/laporan') || Str::startsWith(Request::path(), 'dpnp/laporan'))
                                                 <div class="mb-3">
@@ -180,8 +181,8 @@
                                             <div class="mb-3 mt-4">
                                                 @if (Str::startswith(Request::path(), 'pic/laporan') || Str::startswith(Request::path(), 'dpnp/laporan'))
                                                     <button class="btn btn-success " type="button"
-                                                        data-bs-toggle="modal" data-bs-target="#tutupModal">Tutup
-                                                        Laporan</button>
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#tutupModal">Selesai</button>
                                                 @endif
                                                 @if (Str::startswith(Request::path(), 'pic/laporan'))
                                                     <button class="btn btn-warning " type="button"
@@ -232,8 +233,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
-                    <button type="button" class="btn btn-success" id="tutup-laporan">Tutup
-                        Laporan</button>
+                    <button type="button" class="btn btn-success" id="tutup-laporan">
+                        Selesai
+                    </button>
                 </div>
             </div>
         </div>

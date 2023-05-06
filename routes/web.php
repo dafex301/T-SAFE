@@ -15,9 +15,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['namespace' => 'App\Http\Controllers'], function () {
-    // Dashboard Routes
-    Route::get('/', 'DashboardController@index')->name('dashboard.index');
-
     // Guest Routes
     Route::group(['middleware' => ['guest']], function () {
         // Register Routes
@@ -31,6 +28,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
 
     // Auth Routes
     Route::group(['middleware' => ['auth']], function () {
+        Route::get('/', 'DashboardController@index')->name('dashboard.index');
+
         // Lapor Routes
         Route::get('/lapor', 'LaporanController@create')->name('lapor.create');
         Route::post('/lapor', 'LaporanController@store')->name('lapor.store');

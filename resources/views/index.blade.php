@@ -87,9 +87,9 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between">
                         <div>
-                            <h4 class="card-title mb-0">Traffic</h4>
+                            <h4 class="card-title mb-0">Laporan</h4>
                             {{-- <div class="small text-medium-emphasis">January - July 2023</div> --}}
-                            <div>Januari - Desember {{}}</div>
+                            <div>12 Bulan Terakhir</div>
                         </div>
                     </div>
                     <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">

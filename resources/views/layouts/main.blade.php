@@ -236,8 +236,18 @@
                 @auth
                     <ul class="header-nav ms-auto">
                         <li class="nav-item"><a class="nav-link" href="#">
-                                Welcome, {{ Auth::user()->name }} - {{ Auth::user()->Role->name }} -
-                                {{ Auth::user()->Cabang->name }}</a></li>
+                                Welcome, {{ Auth::user()->name }} -
+                                @if (Auth::user()->role == 3)
+                                    Branch Admin
+                                @elseif (Auth::user()->role == 4)
+                                    Admin
+                                @elseif (Auth::user()->role == 5)
+                                    Branch Manager
+                                @else
+                                    {{ Auth::user()->Role->name }} -
+                                @endif
+                                {{ Auth::user()->Cabang->name }}
+                            </a></li>
 
                         <li class="nav-item"><a class="nav-link" href="#">
                                 <svg class="icon icon-lg">
@@ -280,8 +290,7 @@
 
         {{-- Footer --}}
         <footer class="footer">
-            <div>Footer</div>
-            <div class="ms-auto">Footer Kanan</div>
+            <div>PT. Taspen</div>
         </footer>
         {{-- End of Footer --}}
 
