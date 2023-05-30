@@ -238,11 +238,13 @@
                         <li class="nav-item"><a class="nav-link" href="#">
                                 Welcome, {{ Auth::user()->name }} -
                                 @if (Auth::user()->role == 3)
-                                    Branch Admin
+                                    HC&GA Section Head -
                                 @elseif (Auth::user()->role == 4)
-                                    Admin
+                                    Procurement & Maintenance Admin -
                                 @elseif (Auth::user()->role == 5)
-                                    Branch Manager
+                                    Branch Manager -
+                                @elseif (Auth::user()->role == 2)
+                                    User -
                                 @else
                                     {{ Auth::user()->Role->name }} -
                                 @endif

@@ -24,13 +24,13 @@ class UserSeeder extends Seeder
 
         User::factory()->create([
             'role' => 2,
-            'username' => 'staff-jkt',
+            'username' => 'user-jkt',
             'cabang' => 1
         ]);
 
         User::factory()->create([
             'role' => 2,
-            'username' => 'staff-smg',
+            'username' => 'user-smg',
             'cabang' => 2
         ]);
 
