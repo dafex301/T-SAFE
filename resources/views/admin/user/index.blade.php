@@ -100,12 +100,24 @@
                             <input type="text" class="form-control" id="create-name" name="name" required>
                         </div>
                         <div class="form-group">
+                            <label for="create-nik" class="col-form-label">NIK</label>
+                            <input type="text" class="form-control" id="create-nik" name="nik" required>
+                        </div>
+                        <div class="form-group">
                             <label for="create-email" class="col-form-label">Email</label>
                             <input type="email" class="form-control" id="create-email" name="email" required>
                         </div>
                         <div class="form-group">
                             <label for="create-username" class="col-form-label">Username</label>
                             <input type="text" class="form-control" id="create-username" name="username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="create-cabang" class="col-form-label">Cabang</label>
+                            <select name="cabang" id="create-cabang" class="form-control" required>
+                                @foreach ($cabang as $c)
+                                    <option value="{{ $c->id }}">{{ $c->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="create-role" class="col-form-label">Role</label>
@@ -151,12 +163,24 @@
                             <input type="text" class="form-control" id="update-name" name="name">
                         </div>
                         <div class="form-group">
+                            <label for="update-nik" class="col-form-label">Nama</label>
+                            <input type="text" class="form-control" id="update-nik" name="nik">
+                        </div>
+                        <div class="form-group">
                             <label for="update-email" class="col-form-label">Email</label>
                             <input type="email" class="form-control" id="update-email" name="email">
                         </div>
                         <div class="form-group">
                             <label for="update-username" class="col-form-label">Username</label>
                             <input type="text" class="form-control" id="update-username" name="username">
+                        </div>
+                        <div class="form-group">
+                            <label for="create-cabang" class="col-form-label">Cabang</label>
+                            <select name="cabang" id="create-cabang" class="form-control" required>
+                                @foreach ($cabang as $c)
+                                    <option value="{{ $c->id }}">{{ $c->name }}</option>
+                                @endforeach
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="update-role" class="col-form-label">Role</label>
