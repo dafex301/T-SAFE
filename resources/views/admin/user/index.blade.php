@@ -43,7 +43,7 @@
                                                             data-id="{{ $u->id }}" data-name="{{ $u->name }}"
                                                             data-email="{{ $u->email }}"
                                                             data-username="{{ $u->username }}"
-                                                            data-role="{{ $u->role }}">
+                                                            data-role="{{ $u->role }}" data-nik="{{ $u->nik }}">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                                                 style="height: 20px">
@@ -58,7 +58,8 @@
                                                                 data-name="{{ $u->name }}"
                                                                 data-email="{{ $u->email }}"
                                                                 data-username="{{ $u->username }}"
-                                                                data-role="{{ $u->Role->name }}">
+                                                                data-role="{{ $u->Role->name }}"
+                                                                data-nik="{{ $u->nik }}">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke-width="1.5"
                                                                     stroke="currentColor" style="height: 20px">
@@ -163,7 +164,7 @@
                             <input type="text" class="form-control" id="update-name" name="name">
                         </div>
                         <div class="form-group">
-                            <label for="update-nik" class="col-form-label">Nama</label>
+                            <label for="update-nik" class="col-form-label">NIK</label>
                             <input type="text" class="form-control" id="update-nik" name="nik">
                         </div>
                         <div class="form-group">
@@ -240,6 +241,7 @@
             // Extract info from data-* attributes
             var id = button.data('id')
             var name = button.data('name')
+            var nik = button.data('nik')
             var username = button.data('username')
             var email = button.data('email')
             var role = button.data('role')
@@ -249,6 +251,7 @@
             var modal = $(this)
 
             $('#update-name').val(name)
+            $('#update-nik').val(nik)
             $('#update-username').val(username)
             $('#update-email').val(email)
             $('#update-role').val(role)
