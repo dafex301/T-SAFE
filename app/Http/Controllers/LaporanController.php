@@ -7,10 +7,11 @@ use App\Models\Laporan;
 use App\Models\Kategori;
 use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\DokumentasiLaporan;
+use App\Models\DokumentasiSelesai;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\StoreLaporanRequest;
 use App\Http\Requests\UpdateLaporanRequest;
-use App\Models\DokumentasiSelesai;
 
 class LaporanController extends Controller
 {
@@ -170,6 +171,8 @@ class LaporanController extends Controller
             $filePath[] = $image->storeAs('image', $filename, 'public');
         }
 
+        DB::beginTransaction();
+
         // Create new Laporan
         $laporan = Laporan::create([
             'pelapor' => auth()->user()->id,
@@ -189,6 +192,8 @@ class LaporanController extends Controller
             ]);
         }
 
+        DB::commit();
+
         return redirect()->route('laporan.index')->with('success', 'Laporan berhasil dibuat!');
     }
 
@@ -198,9 +203,14 @@ class LaporanController extends Controller
      * @param  \App\Models\Laporan  $laporan
      * @return \Illuminate\Http\Response
      */
-    public function show(String $id)
+    public function show(String $id, String $id2)
     {
-        $laporan = Laporan::find($id);
+
+        if ($id2) {
+            $laporan = Laporan::find($id2);
+        } else {
+            $laporan = Laporan::find($id);
+        }
 
         return view('detail', [
             'laporan' => $laporan,
@@ -310,11 +320,13 @@ class LaporanController extends Controller
             $laporan->dpnp = auth()->user()->id;
             $laporan->dpnp_checked = true;
             $laporan->dpnp_checked_at = now();
+
+            // TODO: test
+            $laporan->completed = true;
+            $laporan->completed_at = now();
+            $laporan->completed_by = auth()->user()->id;
         }
 
-        $laporan->completed = true;
-        $laporan->completed_at = now();
-        $laporan->completed_by = auth()->user()->id;
 
 
         $laporan->save();
@@ -377,6 +389,12 @@ class LaporanController extends Controller
         $laporan->branch_manager = auth()->user()->id;
         $laporan->branch_manager_checked = true;
         $laporan->branch_manager_checked_at = now();
+
+        if ($laporan->immediate_action && $laporan->prevention) {
+            $laporan->completed = true;
+            $laporan->completed_at = now();
+            $laporan->completed_by = auth()->user()->id;
+        }
 
         $laporan->save();
 
@@ -443,6 +461,7 @@ class LaporanController extends Controller
      */
     public function revisi(String $id)
     {
+        DB::beginTransaction();
         $laporan = Laporan::find($id);
 
         $laporan->lokasi = request()->lokasi ?? $laporan->lokasi;
@@ -451,11 +470,42 @@ class LaporanController extends Controller
         $laporan->deskripsi = request()->deskripsi ?? $laporan->deskripsi;
 
         if (request()->hasFile('image')) {
-            File::delete(storage_path($laporan->image));
+            // Get all image in dokumentasi_laporans that have laporan_id == $laporan->id and then delete it
+            $dokumentasi_laporans = DokumentasiLaporan::where('laporan_id', $laporan->id)->get();
 
-            $filePath = request()->file('image')
-                ->storeAs('image', time() . '_' . $laporan->lokasi . '_' . auth()->user()->name . '.' . request()->image->extension(), 'public');
-            $laporan->image = $filePath;
+            foreach ($dokumentasi_laporans as $dokumentasi_laporan) {
+                File::delete($dokumentasi_laporan->image);
+                $dokumentasi_laporan->delete();
+            }
+
+            $images = request()->file('image');
+
+            foreach ($images as $image) {
+                $fileName = time() . '-' . $image->getClientOriginalName();
+                DokumentasiLaporan::create([
+                    'laporan_id' => $laporan->id,
+                    'image' => $image->storeAs('dokumentasi_laporans', $fileName, 'public'),
+                ]);
+            }
+        }
+
+        if (request()->hasFile('completed_image')) {
+            $dokumentasi_selesais = DokumentasiSelesai::where('laporan_id', $laporan->id)->get();
+
+            foreach ($dokumentasi_selesais as $dokumentasi_selesai) {
+                File::delete($dokumentasi_selesai->image);
+                $dokumentasi_selesai->delete();
+            }
+
+            $images = request()->file('completed_image');
+
+            foreach ($images as $image) {
+                $fileName = time() . '-' . $image->getClientOriginalName();
+                DokumentasiSelesai::create([
+                    'laporan_id' => $laporan->id,
+                    'image' => $image->storeAs('dokumentasi_selesais', $fileName, 'public'),
+                ]);
+            }
         }
 
         if ($laporan->pic_rejected) {
@@ -509,6 +559,8 @@ class LaporanController extends Controller
         }
 
         $laporan->save();
+        DB::commit();
+
 
         return redirect()->route('laporan.index')->with('success', 'Laporan berhasil direvisi!');
     }

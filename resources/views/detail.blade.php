@@ -15,12 +15,12 @@
                         </div>
                     @endif
 
-                    @if ($laporan->bm_rejected)
+                    @if ($laporan->branch_manager_rejected)
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                             <strong>Peringatan!</strong> Laporan ini ditolak oleh BM
                             <br>
                             <strong>Alasan:</strong>
-                            {{ $laporan->bm_rejected_reason }}
+                            {{ $laporan->branch_manager_rejected_reason }}
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     @endif
@@ -130,27 +130,30 @@
                                         <div class="mb-3">
                                             <label class="form-label" for="image">Dokumentasi</label>
                                             <div class="img-container mb-2">
-                                                @foreach ($laporan->DokumentasiLaporan as $item)
-                                                    <img src="/storage/{{ $item->image }}" alt="Dokumentasi"
-                                                        class="img-fluid col-lg-4" srcset="">
-                                                @endforeach
+
                                                 @if ($laporan->pic_rejected || $laporan->branch_manager_rejected || $laporan->dpnp_rejected)
                                                     <input type="file" id="dokumentasi" class="form-control"
                                                         accept="image/*" capture="camera" value="{{ old('image') }}"
-                                                        name="image">
+                                                        name="image[]">
                                                 @endif
                                                 @error('image')
                                                     <div class="text-danger">
                                                         {{ $message }}
                                                     </div>
                                                 @enderror
+                                                @foreach ($laporan->DokumentasiLaporan as $item)
+                                                    <img src="/storage/{{ $item->image }}" alt="Dokumentasi"
+                                                        class="img-fluid col-lg-4 old-image" srcset="">
+                                                @endforeach
                                             </div>
 
                                             <button type="submit" hidden id="verifikasi-laporan-submit">
                                                 Selesai
                                             </button>
 
-                                            @if (Str::startsWith(Request::path(), 'pic/laporan') || Str::startsWith(Request::path(), 'dpnp/laporan'))
+                                            @if (Str::startsWith(Request::path(), 'pic/laporan') ||
+                                                    Str::startsWith(Request::path(), 'dpnp/laporan') ||
+                                                    (Str::startsWith(Request::path(), 'bm/laporan') && $laporan->immediate_action && $laporan->prevention))
                                                 <div class="mb-3">
                                                     <label class="form-label" for="immediate_action">Immediate
                                                         Action</label>
@@ -168,13 +171,62 @@
                                                     <div class="text-danger" id="prevention-error"></div>
                                                 </div>
 
+                                                @if (Str::startsWith(Request::path(), 'bm/laporan') && $laporan->immediate_action && $laporan->prevention)
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="completed-image">Evidence
+                                                            Pencegahan /
+                                                            Perbaikan</label>
+                                                        <div class="img-container-2 mb-2"></div>
+                                                        @foreach ($laporan->DokumentasiSelesai as $item)
+                                                            <img src="/storage/{{ $item->image }}" alt="Dokumentasi"
+                                                                class="img-fluid col-lg-4" srcset="">
+                                                        @endforeach
+                                                        <div class="text-danger" id="completed_image-error"></div>
+                                                    </div>
+                                                @else
+                                                    <div class="mb-3">
+                                                        <label class="form-label" for="completed-image">Evidence
+                                                            Pencegahan /
+                                                            Perbaikan</label>
+                                                        <div class="img-container-2 mb-2"></div>
+                                                        <input type="file" id="completed-image"
+                                                            name="completed_image[]" multiple class="form-control"
+                                                            accept="image/*" capture="camera">
+                                                        <div class="text-danger" id="completed_image-error"></div>
+                                                    </div>
+                                                @endif
+                                                {{-- TODO --}}
+                                            @elseif ($laporan->immediate_action && $laporan->prevention)
                                                 <div class="mb-3">
-                                                    <label class="form-label" for="completed-image">Evidence Pencegahan /
+                                                    <label class="form-label" for="immediate_action">Immediate
+                                                        Action</label>
+                                                    <input class="form-control" id="immediate_action"
+                                                        name="immediate_action" type="text" placeholder=""
+                                                        value="{{ old('immediate_action') ?? ($laporan->immediate_action ?? '') }}">
+                                                    <div class="text-danger" id="immediate_action-error"></div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="prevention">Pencegahan /
                                                         Perbaikan</label>
-                                                    <div class="img-container-2 mb-2"></div>
+                                                    <input class="form-control" id="prevention" name="prevention"
+                                                        type="text" placeholder=""
+                                                        value="{{ old('prevention') ?? ($laporan->prevention ?? '') }}">
+                                                    <div class="text-danger" id="prevention-error"></div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label" for="completed-image">Evidence
+                                                        Pencegahan /
+                                                        Perbaikan</label>
+
+
                                                     <input type="file" id="completed-image" name="completed_image[]"
                                                         multiple class="form-control" accept="image/*" capture="camera">
                                                     <div class="text-danger" id="completed_image-error"></div>
+                                                    <div class="img-container-2 mb-2"></div>
+                                                    @foreach ($laporan->DokumentasiSelesai as $item)
+                                                        <img src="/storage/{{ $item->image }}" alt="Dokumentasi"
+                                                            class="img-fluid col-lg-4 old-complete-image" srcset="">
+                                                    @endforeach
                                                 </div>
                                             @endif
 
@@ -399,6 +451,16 @@
                 "{{ route('laporan.revisi', $laporan->id) }}");
             $('#verifikasi-laporan-submit').click();
             $('#cancelModal').click();
+        });
+
+        // Remove elements with class 'old-complete-image' when 'completed-image' input has a file uploaded
+        $('#completed-image').change(function() {
+            $('.old-complete-image').remove();
+        });
+
+        // Delete elements with class 'old-image' when 'dokumentasi' input has a file uploaded
+        $('#dokumentasi').change(function() {
+            $('.old-image').remove();
         });
     </script>
 
