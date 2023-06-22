@@ -111,7 +111,8 @@
                                                                 </a>
                                                             @endif
 
-                                                            @if (Str::startsWith(Request::path(), ['pic/', 'bm/', 'dpnp/']) && $l->is_complete)
+                                                            @if (Str::startsWith(Request::path(), ['pic/', 'bm/', 'dpnp/']) &&
+                                                                    (!$l->completed || Request::path() !== 'dpnp/laporan'))
                                                                 <a href="/{{ Request::path() . '/' . $l->id }}"
                                                                     class="btn btn-outline-success">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
