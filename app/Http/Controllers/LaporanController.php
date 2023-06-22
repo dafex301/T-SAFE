@@ -109,11 +109,15 @@ class LaporanController extends Controller
                 ->where('dpnp_checked', true)
                 ->orWhere('dpnp_rejected', true)
                 ->get();
+        } else if ($role === 'Admin') {
+            $laporan = Laporan::orderBy('updated_at', 'desc')
+                ->get();
         } else {
             $laporan = Laporan::orderBy('updated_at', 'desc')
                 ->where('cabang', $user->cabang)
                 ->get();
         }
+
         return view('history', [
             'laporan' => $laporan
         ]);
@@ -718,6 +722,8 @@ class LaporanController extends Controller
      */
     public function destroy(Laporan $laporan)
     {
-        //
+        $laporan->delete();
+
+        return redirect()->back();
     }
 }

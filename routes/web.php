@@ -37,6 +37,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         // Laporan Routes
         Route::get('/laporan', 'LaporanController@index')->name('laporan.index');
         Route::get('/{role}/laporan/{id}', 'LaporanController@detailRole')->name('laporan.detailRole');
+        Route::delete('/laporan/{laporan}', 'LaporanController@destroy')->name('laporan.destroy');
 
         // History Routes
         Route::get('/history', 'LaporanController@history')->name('laporan.history');
