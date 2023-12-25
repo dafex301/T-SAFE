@@ -9,9 +9,11 @@ class Aset extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'nomor';
+
     protected $fillable = [
         'nomor',
         'nama',
-        'tahun',
+        'tanggal',
     ];
 }

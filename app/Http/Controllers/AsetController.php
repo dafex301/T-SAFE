@@ -15,7 +15,9 @@ class AsetController extends Controller
      */
     public function index()
     {
-        //
+        return view('admin.aset.index', [
+            'aset' => Aset::orderBy('created_at', 'desc')->get(),
+        ]);
     }
 
     /**
@@ -36,7 +38,13 @@ class AsetController extends Controller
      */
     public function store(StoreAsetRequest $request)
     {
-        //
+        $aset = Aset::create([
+            'nomor' => $request->nomor,
+            'nama' => $request->nama,
+            'tanggal' => $request->tanggal,
+        ]);
+
+        return redirect('/admin/aset')->with('success', "Aset successfully created.");
     }
 
     /**
@@ -68,9 +76,19 @@ class AsetController extends Controller
      * @param  \App\Models\Aset  $aset
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateAsetRequest $request, Aset $aset)
+    public function update(UpdateAsetRequest $request, Aset $aset, String $id)
     {
-        //
+        $aset = Aset::where('nomor', $id)->first();
+
+        if (!$aset) {
+            return redirect('/admin/aset')->with('error', "Aset tidak ditemukan.");
+        }
+
+
+        $aset->update($request->validated());
+
+
+        return redirect('/admin/aset')->with('success', "Aset successfully updated.");
     }
 
     /**
@@ -79,8 +97,16 @@ class AsetController extends Controller
      * @param  \App\Models\Aset  $aset
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Aset $aset)
+    public function destroy(Aset $aset, String $id)
     {
-        //
+        $aset = Aset::where('nomor', $id)->first();
+
+        if (!$aset) {
+            return redirect('/admin/aset')->with('error', "Aset tidak ditemukan.");
+        }
+
+        $aset->delete();
+
+        return redirect('/admin/aset')->with('success', "Aset successfully deleted.");
     }
 }

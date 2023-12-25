@@ -99,5 +99,10 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::post('/admin/kategori', 'KategoriController@store')->name('kategori.store');
         Route::put('/admin/kategori/{id}', 'KategoriController@update')->name('kategori.update');
         Route::delete('/admin/kategori/{id}', 'KategoriController@destroy')->name('kategori.destroy');
+
+        Route::get('/admin/aset', 'AsetController@index')->name('aset.index');
+        Route::post('/admin/aset', 'AsetController@store')->name('aset.store');
+        Route::put('/admin/aset/{id}', 'AsetController@update')->name('aset.update');
+        Route::delete('/admin/aset/{id}', 'AsetController@destroy')->name('aset.destroy');
     });
 });
