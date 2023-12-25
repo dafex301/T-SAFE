@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Cabang;
+use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
@@ -98,6 +99,41 @@ class UserController extends Controller
         ]);
 
         return redirect('/admin/akun')->with('success', "User successfully created.");
+    }
+
+    public function import(Request $request)
+    {
+        $file = $request->file('file');
+        $fileContents = file($file->getPathname());
+
+        $cabangMap = Cabang::pluck('id', 'name');
+        $roleMap = Role::pluck('id', 'name');
+
+
+        foreach ($fileContents as $line) {
+            // skip first line
+            if ($line == $fileContents[0]) {
+                continue;
+            }
+            $data = str_getcsv($line);
+
+            $cabangId = $cabangMap[$data[4]] ?? null;
+            $roleId = $roleMap[$data[5]] ?? null;
+
+            if ($cabangId !== null && $roleId !== null) {
+                User::create([
+                    'name' => $data[0],
+                    'nik' => $data[1],
+                    'email' => $data[2],
+                    'username' => $data[3],
+                    'cabang' => $cabangId,
+                    'role' => $roleId,
+                    'password' => $data[6],
+                ]);
+            }
+        }
+
+        return redirect()->back()->with('success', 'CSV file imported successfully.');
     }
 
     public function update(User $user, String $id)

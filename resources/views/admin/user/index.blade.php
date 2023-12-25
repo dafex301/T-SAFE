@@ -9,9 +9,14 @@
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <strong>Manajemen Akun</strong>
-                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
-                                    Buat Akun
-                                </button>
+                                <div>
+                                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#importModal">
+                                        Import Akun
+                                    </button>
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
+                                        Buat Akun
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div class="card-body">
@@ -142,6 +147,34 @@
         </div>
     </form>
     {{-- End of Create Modal --}}
+
+    <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel"
+        aria-hidden="true">
+        <form method="POST" action="/admin/akun/import" id="importForm" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createModalLabel">Import Akun</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="file" class="col-form-label">Nama</label>
+                            <input type="file" accept=".csv" class="form-control" id="file" name="file"
+                                required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Buat Akun</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 
     {{-- Update Modal --}}
     <form method="POST" action="/admin/akun" id="updateForm">

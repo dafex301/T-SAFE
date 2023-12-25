@@ -91,6 +91,7 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         // User Routes
         Route::get('/admin/akun', 'UserController@index')->name('user.index');
         Route::post('/admin/akun', 'UserController@store')->name('user.store');
+        Route::post('/admin/akun/import', 'UserController@import')->name('user.import');
         Route::put('/admin/akun/{id}', 'UserController@update')->name('user.update');
         Route::delete('/admin/akun/{id}', 'UserController@destroy')->name('user.destroy');
 
