@@ -29,6 +29,8 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
     // Auth Routes
     Route::group(['middleware' => ['auth']], function () {
         Route::get('/', 'DashboardController@index')->name('dashboard.index');
+        Route::get('/profile', 'UserController@show')->name('user.profile');
+        Route::post('/update-password', 'UserController@updatePassword')->name('password.update');
 
         // Lapor Routes
         Route::get('/lapor', 'LaporanController@create')->name('lapor.create');

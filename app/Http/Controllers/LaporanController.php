@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Aset;
 use App\Models\Laporan;
 use App\Models\Kategori;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -133,6 +134,7 @@ class LaporanController extends Controller
         // Return view lapor with kategori data
         return view('lapor', [
             'kategori' => Kategori::all(),
+            'aset' => Aset::all(),
         ]);
     }
 

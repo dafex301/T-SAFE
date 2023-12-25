@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\RegisterRequest;
-use App\Models\Cabang;
 use App\Models\Role;
+use App\Models\User;
+use App\Models\Cabang;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\RegisterRequest;
 
 class UserController extends Controller
 {
@@ -41,6 +42,35 @@ class UserController extends Controller
             'role' => Role::all(),
             'cabang' => Cabang::all()
         ]);
+    }
+
+    public function show()
+    {
+        return view('profile');
+    }
+
+    public function updatePassword()
+    {
+
+        // first get the current user id
+        $id = auth()->user()->id;
+
+        // then find the user from database
+        $user = User::findOrFail($id);
+
+        // validate the current password with password in database
+        if (Hash::check(request('current_password'), $user->password)) {
+            // now we are sure that current password is valid
+            // go ahead and update the password
+            $user->password = request('new_password');
+            $user->save();
+
+            return redirect('/profile')->with('success', "Password successfully updated.");
+        } else {
+            return redirect('/profile')->with('error', "Current password does not match.");
+        }
+
+        return redirect('/profile')->with('error', "Something went wrong.");
     }
 
     public function store()

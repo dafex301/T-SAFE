@@ -38,14 +38,14 @@
                                             {{-- make it radio button yes/no --}}
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio" name="isAset" id="asetTrue"
-                                                    value="aset">
+                                                    value="true">
                                                 <label class="form-check-label" for="asetTrue">
                                                     Aset
                                                 </label>
                                             </div>
                                             <div class="form-check">
                                                 <input class="form-check-input" type="radio" name="isAset" id="asetFalse"
-                                                    value="" checked>
+                                                    value="false" checked>
                                                 <label class="form-check-label" for="asetFalse">
                                                     Bukan Aset
                                                 </label>
@@ -59,30 +59,26 @@
                                         <div id="aset-selector" class="mb-3">
                                             <label class="form-label" for="jenis">Jenis Aset</label>
                                             <select id="aset" name="aset" class="select-search"
-                                                placeholder="Pilih aset">
-                                                @if (old('kategori') == null)
+                                                placeholder="Pilih Aset">
+                                                @if (old('aset') == null)
                                                     <option value="" disabled selected>Pilih Jenis / Kategori</option>
                                                 @else
                                                     <option value="" disabled>Pilih Jenis / Kategori</option>
                                                 @endif
                                                 {{-- Foreach kategori --}}
-                                                @foreach ($kategori as $item)
-                                                    @if (old('kategori') == $item->id)
-                                                        <option value="{{ $item->id }}" selected>{{ $item->name }}
+                                                @foreach ($aset as $item)
+                                                    @if (old('aset') == $item->nomor)
+                                                        <option value="{{ $item->nomor }}" selected>{{ $item->nomor }} -
+                                                            {{ $item->nama }}
                                                         </option>
                                                     @else
-                                                        <option value="{{ $item->id }}">{{ $item->name }}
+                                                        <option value="{{ $item->nomor }}">{{ $item->nomor }} -
+                                                            {{ $item->nama }}
                                                         </option>
                                                     @endif
                                                 @endforeach
-                                                @if (old('kategori') == '0')
-                                                    <option selected value="0">Lain-lain</option>
-                                                @else
-                                                    <option value="0">Lain-lain</option>
-                                                @endif
-                                                {{-- End Foreach --}}
                                             </select>
-                                            @error('kategori')
+                                            @error('aset')
                                                 <div class="text-danger">
                                                     {{ $message }}
                                                 </div>
@@ -130,8 +126,8 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="deskripsi">Deskripsi</label>
-                                            <input class="form-control" id="deskripsi" type="text" placeholder=""
-                                                name="deskripsi" value="{{ old('deskripsi') }}">
+                                            <textarea class="form-control" id="deskripsi" type="text" placeholder="" name="deskripsi"
+                                                value="{{ old('deskripsi') }}"></textarea>
                                             @error('deskripsi')
                                                 <div class="text-danger">
                                                     {{ $message }}

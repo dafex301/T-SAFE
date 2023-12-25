@@ -256,7 +256,7 @@
                 </a>
                 @auth
                     <ul class="header-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link" href="#">
+                        <li class="nav-item"><a class="nav-link" href="/profile">
                                 Welcome, {{ Auth::user()->name }} -
                                 @if (Auth::user()->role == 3)
                                     HC&GA Section Head -
@@ -313,7 +313,10 @@
 
         {{-- Footer --}}
         <footer class="footer">
-            <div>PT. Taspen</div>
+            <img src="assets/img/logo.png" alt="T-SAFE" width="70">
+            <div><b>TSAFE - PT. Taspen (Persero)</b></div>
+            <img src="assets/img/taspen.png" alt="PT. Taspen" width="80">
+
         </footer>
         {{-- End of Footer --}}
 
