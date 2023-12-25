@@ -10,7 +10,7 @@
 
                         <div class="card-body">
 
-                            <div class="tab-content rounded-bottom">
+                            <div class="tab-content rounded-bottom table-responsive">
                                 <div class="tab-pane active preview" role="tabpanel" id="preview-719">
                                     <table class="table table-hover" id="myTable">
                                         <thead class="thead-dark">
@@ -20,6 +20,7 @@
                                                 <th scope="col">Tanggal</th>
                                                 <th scope="col">Lokasi</th>
                                                 <th scope="col">Kategori</th>
+                                                <th scope="col">Aset</th>
                                                 <th scope="col">Pelapor</th>
                                                 <th scope="col">Immediate Action</th>
                                                 <th scope="col">Perbaikan</th>
@@ -41,6 +42,7 @@
                                                     @else
                                                         <td>{{ $l->kategori_lain }}</td>
                                                     @endif
+                                                    <td>{{ $l->aset ? $l->Aset->nomor . ' ' . $l->Aset->nama : '-' }}</td>
                                                     <td>{{ $l->Pelapor->name }}</td>
                                                     <td>{{ $l->immediate_action ?? '-' }}</td>
                                                     <td>{{ $l->prevention ?? '-' }}</td>

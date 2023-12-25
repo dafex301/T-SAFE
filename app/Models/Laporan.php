@@ -16,6 +16,7 @@ class Laporan extends Model
         'cabang',
         'tanggal',
         'lokasi',
+        'aset',
         'kategori',
         'kategori_lain',
         'deskripsi',
@@ -34,6 +35,12 @@ class Laporan extends Model
         'dpnp',
         'created_at',
     ];
+
+    // Relation with Aset
+    public function Aset()
+    {
+        return $this->belongsTo(Aset::class, 'aset', 'nomor');
+    }
 
     // Relation with Kategori
     public function Kategori()

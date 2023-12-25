@@ -188,6 +188,7 @@ class LaporanController extends Controller
             'kategori' => $request->kategori,
             'kategori_lain' => $request->kategori == 0 ? $request->kategori_lain : null,
             'deskripsi' => $request->deskripsi,
+            'aset' => $request->aset,
         ]);
 
         // Store image to db, to table DokumentasiLaporan with laporan_id
@@ -241,9 +242,11 @@ class LaporanController extends Controller
 
         $laporan = Laporan::find($id);
 
+
         return view('detail', [
             'laporan' => $laporan,
-            'kategori' => Kategori::all()
+            'kategori' => Kategori::all(),
+            'aset' => Aset::all()
         ]);
     }
 

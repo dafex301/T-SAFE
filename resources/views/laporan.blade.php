@@ -12,7 +12,7 @@
                             <div class="card-body">
 
                                 <div class="tab-content rounded-bottom">
-                                    <div class="tab-pane active preview" role="tabpanel" id="preview-719">
+                                    <div class="tab-pane active preview table-responsive" role="tabpanel" id="preview-719">
                                         <table class="table table-hover" id="myTable">
                                             <thead class="thead-dark">
                                                 <tr>
@@ -20,6 +20,7 @@
                                                     <th scope="col">Deskripsi</th>
                                                     <th scope="col">Hari, Tanggal</th>
                                                     <th scope="col">Lokasi</th>
+                                                    <th scope="col">Aset</th>
                                                     <th scope="col">Kategori</th>
                                                     <th scope="col">Status</th>
                                                     <th scope="col">Aksi</th>
@@ -35,11 +36,14 @@
                                                         </td>
 
                                                         <td>{{ $l->lokasi }}</td>
+                                                        <td>{{ $l->aset ? $l->Aset->nomor . ' ' . $l->Aset->nama : '-' }}
+                                                        </td>
                                                         @if ($l->kategori === 0)
                                                             <td>{{ $l->kategori_lain }}</td>
                                                         @else
                                                             <td>{{ $l->Kategori->name }}</td>
                                                         @endif
+
 
                                                         <td>
                                                             @if ($l->completed)

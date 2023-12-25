@@ -313,9 +313,10 @@
 
         {{-- Footer --}}
         <footer class="footer">
-            <img src="assets/img/logo.png" alt="T-SAFE" width="70">
+            <img src={{ url('assets/img/logo.png') }} alt="T-SAFE" width="70">
             <div><b>TSAFE - PT. Taspen (Persero)</b></div>
-            <img src="assets/img/taspen.png" alt="PT. Taspen" width="80">
+            <img src={{ url('assets/img/taspen.png') }} alt="PT. Taspen" width="80">
+
 
         </footer>
         {{-- End of Footer --}}

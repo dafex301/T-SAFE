@@ -57,6 +57,8 @@
     <div style="border: 1px solid black; padding: 10px">
         <p style="font-weight: 800">Deskripsi Kejadian</p>
         <p>{{ $laporan->deskripsi }}</p>
+        <p style="font-weight: 800">Aset</p>
+        <p>{{ $laporan->aset ? $laporan->Aset->nomor . ' - ' . $laporan->Aset->nama : '-' }}</p>
         <p style="font-weight: 800">Potensi Bahaya Kategori</p>
         <p>{{ $laporan->kategori ? $laporan->Kategori->name : $laporan->kategori_lain }}</p>
         <p style="font-weight: 800">Evidence</p>

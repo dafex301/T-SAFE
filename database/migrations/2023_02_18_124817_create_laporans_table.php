@@ -19,6 +19,9 @@ return new class extends Migration
             $table->foreignId('cabang');
             $table->date('tanggal');
             $table->string('lokasi');
+
+            $table->foreignId('aset')->nullable();
+
             $table->foreignId('kategori');
             $table->string('kategori_lain')->nullable();
             $table->string('deskripsi');

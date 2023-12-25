@@ -76,11 +76,62 @@
                                                 </div>
                                             @enderror
                                         </div>
+                                        <div id="is-aset" class="mb-3">
+                                            <label class="form-label" for="isAset">Apakah merupakan aset?</label>
+                                            {{-- make it radio button yes/no --}}
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="isAset" id="asetTrue"
+                                                    value="true"
+                                                    {{ old('isAset') == 'true' || !empty($laporan->aset) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="asetTrue">
+                                                    Aset
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="isAset" id="asetFalse"
+                                                    value="false"
+                                                    {{ old('isAset') == 'false' || empty($laporan->aset) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="asetFalse">
+                                                    Bukan Aset
+                                                </label>
+                                            </div>
+                                            @error('isAset')
+                                                <div class="text-danger">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <div id="aset-selector" class="mb-3">
+                                            <label class="form-label" for="jenis">Jenis Aset</label>
+                                            <select id="aset" name="aset" class="select-search"
+                                                placeholder="Pilih Aset">
+                                                @if (old('aset') == null && empty($laporan->aset))
+                                                    <option value="" disabled selected>Pilih Jenis / Kategori</option>
+                                                @else
+                                                    <option value="" disabled>Pilih Jenis / Kategori</option>
+                                                @endif
+                                                {{-- Foreach kategori --}}
+                                                @foreach ($aset as $item)
+                                                    @if (old('aset') == $item->nomor || (!empty($laporan->aset) && $laporan->aset == $item->nomor))
+                                                        <option value="{{ $item->nomor }}" selected>{{ $item->nomor }} -
+                                                            {{ $item->nama }}</option>
+                                                    @else
+                                                        <option value="{{ $item->nomor }}">{{ $item->nomor }} -
+                                                            {{ $item->nama }}</option>
+                                                    @endif
+                                                @endforeach
+                                            </select>
+                                            @error('aset')
+                                                <div class="text-danger">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="jenis">Jenis / Kategori Potensi
                                                 Bahaya</label>
-                                            <select class="form-select" aria-label="jenis" id="jenis" name="kategori"
-                                                @if (Str::startsWith(Request::path(), 'bm/laporan')) disabled @endif>
+                                            <select class="form-select" aria-label="jenis" id="jenis"
+                                                name="kategori" @if (Str::startsWith(Request::path(), 'bm/laporan')) disabled @endif>
                                                 <option value="">Pilih Jenis / Kategori</option>
                                                 {{-- Foreach kategori --}}
                                                 @foreach ($kategori as $item)
@@ -88,15 +139,19 @@
                                                         <option value="{{ $item->id }}" selected>{{ $item->name }}
                                                         </option>
                                                     @elseif ($laporan->kategori == $item->id)
-                                                        <option value="{{ $item->id }}" selected>
-                                                            {{ $item->name }}
+                                                        <option value="{{ $item->id }}" selected>{{ $item->name }}
                                                         </option>
                                                     @else
-                                                        <option value="{{ $item->id }}">{{ $item->name }}
-                                                        </option>
+                                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
                                                     @endif
                                                 @endforeach
                                                 {{-- End Foreach --}}
+                                                {{-- Add kategori_lain --}}
+                                                @if (!empty($laporan->kategori_lain))
+                                                    <option value="0"
+                                                        @if (old('kategori') == '0' || $laporan->kategori == '0') selected @endif>
+                                                        Lain-lain</option>
+                                                @endif
                                             </select>
                                             @error('kategori')
                                                 <div class="text-danger">
@@ -106,8 +161,9 @@
                                         </div>
                                         <div class="mb-3" id="jenis-lain-container" style="display: none">
                                             <label class="form-label" for="jenis-lain">Jenis / Kategori</label>
-                                            <input class="form-control" name="kategori_lain" id="jenis-lain" type="text"
-                                                @if (Str::startsWith(Request::path(), 'bm/laporan')) disabled @endif placeholder=""
+                                            <input class="form-control" name="kategori_lain" id="jenis-lain"
+                                                type="text" @if (Str::startsWith(Request::path(), 'bm/laporan')) disabled @endif
+                                                placeholder=""
                                                 value="{{ old('kategori_lain') ?? ($laporan->kategori_lain ?? '') }}">
                                             @error('kategori_lain')
                                                 <div class="text-danger">
@@ -117,10 +173,8 @@
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="deskripsi">Deskripsi</label>
-                                            <input class="form-control" id="deskripsi" type="text" placeholder=""
-                                                name="deskripsi"
-                                                value="{{ old('deskripsi') ?? ($laporan->deskripsi ?? '') }}"
-                                                @if (Str::startsWith(Request::path(), 'bm/laporan')) disabled @endif>
+                                            <textarea class="form-control" id="deskripsi" type="text" placeholder="" name="deskripsi"
+                                                value="{{ old('deskripsi') ?? ($laporan->deskripsi ?? '') }}" @if (Str::startsWith(Request::path(), 'bm/laporan')) disabled @endif>{{ old('deskripsi') ?? ($laporan->deskripsi ?? '') }}</textarea>
                                             @error('deskripsi')
                                                 <div class="text-danger">
                                                     {{ $message }}
