@@ -359,8 +359,8 @@ class LaporanController extends Controller
             'lokasi' => 'required|string',
             'kategori' => 'required',
             'deskripsi' => 'required|string',
-            'immediate_action' => 'nullable|string',
-            'prevention' => 'nullable|string',
+            // 'immediate_action' => 'nullable|string',
+            // 'prevention' => 'nullable|string',
         ]);
 
         // Check if kategori is 0 (Lain-lain)
@@ -394,6 +394,7 @@ class LaporanController extends Controller
         $laporan->branch_manager_checked = true;
         $laporan->branch_manager_checked_at = now();
 
+        // TODO: fix this
         if ($laporan->immediate_action && $laporan->prevention) {
             $laporan->completed = true;
             $laporan->completed_at = now();

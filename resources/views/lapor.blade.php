@@ -33,6 +33,61 @@
                                                 </div>
                                             @enderror
                                         </div>
+                                        <div id="is-aset" class="mb-3">
+                                            <label class="form-label" for="isAset">Apakah merupakan aset?</label>
+                                            {{-- make it radio button yes/no --}}
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="isAset" id="asetTrue"
+                                                    value="aset">
+                                                <label class="form-check-label" for="asetTrue">
+                                                    Aset
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="isAset" id="asetFalse"
+                                                    value="" checked>
+                                                <label class="form-check-label" for="asetFalse">
+                                                    Bukan Aset
+                                                </label>
+                                            </div>
+                                            @error('isAset')
+                                                <div class="text-danger">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <div id="aset-selector" class="mb-3">
+                                            <label class="form-label" for="jenis">Jenis Aset</label>
+                                            <select id="aset" name="aset" class="select-search"
+                                                placeholder="Pilih aset">
+                                                @if (old('kategori') == null)
+                                                    <option value="" disabled selected>Pilih Jenis / Kategori</option>
+                                                @else
+                                                    <option value="" disabled>Pilih Jenis / Kategori</option>
+                                                @endif
+                                                {{-- Foreach kategori --}}
+                                                @foreach ($kategori as $item)
+                                                    @if (old('kategori') == $item->id)
+                                                        <option value="{{ $item->id }}" selected>{{ $item->name }}
+                                                        </option>
+                                                    @else
+                                                        <option value="{{ $item->id }}">{{ $item->name }}
+                                                        </option>
+                                                    @endif
+                                                @endforeach
+                                                @if (old('kategori') == '0')
+                                                    <option selected value="0">Lain-lain</option>
+                                                @else
+                                                    <option value="0">Lain-lain</option>
+                                                @endif
+                                                {{-- End Foreach --}}
+                                            </select>
+                                            @error('kategori')
+                                                <div class="text-danger">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
                                         <div class="mb-3">
                                             <label class="form-label" for="jenis">Jenis / Kategori Potensi Bahaya</label>
                                             <select class="form-select" aria-label="Jenis" id="jenis" name="kategori">
@@ -110,5 +165,22 @@
     </div>
     <script defer>
         document.getElementById('inputTanggal').valueAsDate = new Date();
+    </script>
+
+    <script>
+        $(document).ready(function() {
+            function toggleAsetSelector() {
+                if ($('#asetTrue').is(':checked')) {
+                    $('#aset-selector').show();
+                } else {
+                    $('#aset-selector').hide();
+                }
+            }
+
+            $('#asetTrue, #asetFalse').change(toggleAsetSelector);
+
+            // Call once to set initial state
+            toggleAsetSelector();
+        });
     </script>
 @endsection
