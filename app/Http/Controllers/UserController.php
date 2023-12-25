@@ -121,15 +121,16 @@ class UserController extends Controller
             $roleId = $roleMap[$data[5]] ?? null;
 
             if ($cabangId !== null && $roleId !== null) {
-                User::create([
-                    'name' => $data[0],
-                    'nik' => $data[1],
-                    'email' => $data[2],
-                    'username' => $data[3],
-                    'cabang' => $cabangId,
-                    'role' => $roleId,
-                    'password' => $data[6],
-                ]);
+                $user = User::firstOrNew(['username' => $data[3], 'nik' => $data[1]]);
+
+                if (!$user->exists) {
+                    $user->name = $data[0];
+                    $user->email = $data[2];
+                    $user->cabang = $cabangId;
+                    $user->role = $roleId;
+                    $user->password = $data[6];
+                    $user->save();
+                }
             }
         }
 
