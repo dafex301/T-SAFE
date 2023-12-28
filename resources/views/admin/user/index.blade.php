@@ -148,6 +148,7 @@
     </form>
     {{-- End of Create Modal --}}
 
+    {{-- IMPORT USER MODAL --}}
     <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel"
         aria-hidden="true">
         <form method="POST" action="/admin/akun/import" id="importForm" enctype="multipart/form-data">
@@ -162,7 +163,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="file" class="col-form-label">Nama</label>
+                            <label for="file" class="col-form-label">File CSV</label>
                             <input type="file" accept=".csv" class="form-control" id="file" name="file"
                                 required>
                         </div>

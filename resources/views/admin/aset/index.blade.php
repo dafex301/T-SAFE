@@ -20,9 +20,15 @@
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center w-100">
                                 <strong>Manajemen Aset</strong>
-                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
-                                    Buat Aset
-                                </button>
+                                <div>
+
+                                    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#importModal">
+                                        Import Aset
+                                    </button>
+                                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
+                                        Buat Aset
+                                    </button>
+                                </div>
                             </div>
                         </div>
                         <div class="card-body">
@@ -122,6 +128,40 @@
         </div>
     </form>
     {{-- End of Create Modal --}}
+
+    {{-- Insert Modal --}}
+    <div class="modal fade" id="importModal" tabindex="-1" role="dialog" aria-labelledby="importModalLabel"
+        aria-hidden="true">
+        <form method="POST" action="/admin/aset/import" id="importForm" enctype="multipart/form-data">
+            @csrf
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="createModalLabel">Import Aset</h5>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <label for="file" class="col-form-label">File CSV</label>
+
+                                <a class="text-primary" onclick="downloadCSV()">Download Template</a>
+                            </div>
+                            <input type="file" accept=".csv" class="form-control" id="file" name="file"
+                                required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Buat Aset</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    {{-- End of Insert Modal --}}
 
     {{-- Update Modal --}}
     <form method="POST" action="/admin/aset" id="updateForm">
@@ -243,4 +283,33 @@
         })
     </script>
     {{-- End of Delete Script --}}
+
+    {{-- Import Script --}}
+    <script>
+        function downloadCSV() {
+            // Create a CSV string
+            var csv = [];
+
+            // Add header row
+            var headerRow = ['Nomor', 'Nama', 'Tanggal'];
+            csv.push(headerRow.join(','));
+
+            // Combine CSV rows into a string
+            var dataRow = ['123456789', 'Nama Aset', '01/01/2024'];
+            csv.push(dataRow.join(','));
+
+            var csvString = csv.join('\n');
+            // Create a Blob and initiate the download
+            var blob = new Blob([csvString], {
+                type: 'text/csv'
+            });
+            var a = document.createElement('a');
+            a.href = window.URL.createObjectURL(blob);
+            a.download = 'data_aset.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    </script>
+    {{-- End of Import Script --}}
 @endsection

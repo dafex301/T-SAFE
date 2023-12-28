@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Aset;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreAsetRequest;
 use App\Http\Requests\UpdateAsetRequest;
 
@@ -108,5 +110,32 @@ class AsetController extends Controller
         $aset->delete();
 
         return redirect('/admin/aset')->with('success', "Aset successfully deleted.");
+    }
+
+    public function import(Request $request)
+    {
+        $file = $request->file('file');
+        $fileContents = file($file->getPathname());
+
+
+        foreach ($fileContents as $line) {
+            // skip first line
+            if ($line == $fileContents[0]) {
+                continue;
+            }
+            $data = str_getcsv($line);
+
+            $aset = Aset::firstOrNew(['nomor' => $data[0]]);
+
+            if (!$aset->exists) {
+                $aset->nomor = $data[0];
+                $aset->nama = $data[1];
+                $aset->tanggal = Carbon::createFromFormat('m/d/Y', $data[2])->format('Y-m-d');
+
+                $aset->save();
+            }
+        }
+
+        return redirect()->back()->with('success', 'CSV file imported successfully.');
     }
 }

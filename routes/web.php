@@ -105,5 +105,6 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::post('/admin/aset', 'AsetController@store')->name('aset.store');
         Route::put('/admin/aset/{id}', 'AsetController@update')->name('aset.update');
         Route::delete('/admin/aset/{id}', 'AsetController@destroy')->name('aset.destroy');
+        Route::post('/admin/aset/import', 'AsetController@import')->name('aset.import');
     });
 });
