@@ -48,8 +48,8 @@
                                             @foreach ($users as $u)
                                                 <tr>
                                                     <th scope="row">{{ $loop->iteration }}</th>
-                                                    <th scope="row">{{ $u->name }}</th>
                                                     <th scope="row">{{ $u->nik }}</th>
+                                                    <th scope="row">{{ $u->name }}</th>
                                                     <td scope="">{{ $u->username }}</td>
                                                     <td scope="">{{ $u->Cabang->name }}</td>
                                                     <td scope="">{{ $u->Role->name }}</td>
@@ -121,10 +121,7 @@
                             <label for="create-nik" class="col-form-label">NIK</label>
                             <input type="text" class="form-control" id="create-nik" name="nik" required>
                         </div>
-                        <div class="form-group">
-                            <label for="create-email" class="col-form-label">Email</label>
-                            <input type="email" class="form-control" id="create-email" name="email" required>
-                        </div>
+
                         <div class="form-group">
                             <label for="create-username" class="col-form-label">Username</label>
                             <input type="text" class="form-control" id="create-username" name="username" required>
@@ -217,10 +214,7 @@
                             <label for="update-nik" class="col-form-label">NIK</label>
                             <input type="text" class="form-control" id="update-nik" name="nik">
                         </div>
-                        <div class="form-group">
-                            <label for="update-email" class="col-form-label">Email</label>
-                            <input type="email" class="form-control" id="update-email" name="email">
-                        </div>
+
                         <div class="form-group">
                             <label for="update-username" class="col-form-label">Username</label>
                             <input type="text" class="form-control" id="update-username" name="username">
