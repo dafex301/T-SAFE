@@ -17,6 +17,7 @@ class Laporan extends Model
         'tanggal',
         'lokasi',
         'aset',
+        'aset_lain',
         'kategori',
         'kategori_lain',
         'deskripsi',

@@ -36,7 +36,7 @@
                                                         </td>
 
                                                         <td>{{ $l->lokasi }}</td>
-                                                        <td>{{ $l->aset ? $l->Aset->nomor . ' ' . $l->Aset->nama : '-' }}
+                                                        <td>{{ $l->aset ? $l->Aset->nomor . ' ' . $l->Aset->nama : $l->aset_lain }}
                                                         </td>
                                                         @if ($l->kategori === 0)
                                                             <td>{{ $l->kategori_lain }}</td>

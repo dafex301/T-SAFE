@@ -42,7 +42,7 @@
                                                     @else
                                                         <td>{{ $l->kategori_lain }}</td>
                                                     @endif
-                                                    <td>{{ $l->aset ? $l->Aset->nomor . ' ' . $l->Aset->nama : '-' }}</td>
+                                                    <td>{{ $l->aset ? $l->Aset->nomor . ' ' . $l->Aset->nama : $l->aset_lain }}</td>
                                                     <td>{{ $l->Pelapor->name }}</td>
                                                     <td>{{ $l->immediate_action ?? '-' }}</td>
                                                     <td>{{ $l->prevention ?? '-' }}</td>

@@ -150,14 +150,22 @@ class LaporanController extends Controller
             'tanggal' => 'required|date',
             'lokasi' => 'required|string',
             'kategori' => 'required',
+            'aset' => 'required',
             'deskripsi' => 'required|string',
         ]);
 
 
-        // Check if kategori is 6 (Lain-lain)
+        // Check if kategori is 0 (Lain-lain)
         if ($request->kategori == '0') {
             $this->validate($request, [
                 'kategori_lain' => 'required|string',
+            ]);
+        }
+
+        // if aset is 0 (Lain-lain)
+        if ($request->aset == '0') {
+            $this->validate($request, [
+                'aset_lain' => 'required|string',
             ]);
         }
 
@@ -189,6 +197,7 @@ class LaporanController extends Controller
             'kategori_lain' => $request->kategori == 0 ? $request->kategori_lain : null,
             'deskripsi' => $request->deskripsi,
             'aset' => $request->aset,
+            'aset_lain' => $request->aset == 0 ? $request->aset_lain : null,
         ]);
 
         // Store image to db, to table DokumentasiLaporan with laporan_id
@@ -221,7 +230,8 @@ class LaporanController extends Controller
 
         return view('detail', [
             'laporan' => $laporan,
-            'kategori' => Kategori::all()
+            'kategori' => Kategori::all(),
+            'aset' => Aset::all()
         ]);
     }
 
@@ -283,6 +293,7 @@ class LaporanController extends Controller
         $this->validate($request, [
             'lokasi' => 'required|string',
             'kategori' => 'required',
+            'aset' => 'required',
             'deskripsi' => 'required|string',
             'immediate_action' => 'required|string',
             'prevention' => 'required|string',
@@ -311,11 +322,20 @@ class LaporanController extends Controller
             ]);
         }
 
+        // Check if aset is 0 (Lain-lain)
+        if ($request->aset == '0') {
+            $this->validate($request, [
+                'aset_lain' => 'required|string',
+            ]);
+        }
+
         // Create new Laporan
         $laporan = Laporan::find($id);
         $laporan->lokasi = $request->lokasi;
         $laporan->kategori = $request->kategori;
         $laporan->kategori_lain = $request->kategori == 0 ? $request->kategori_lain : null;
+        $laporan->aset = $request->aset;
+        $laporan->aset_lain = $request->aset == 0 ? $request->aset_lain : null;
         $laporan->deskripsi = $request->deskripsi;
         $laporan->immediate_action = $request->immediate_action;
         $laporan->prevention = $request->prevention;
@@ -374,12 +394,19 @@ class LaporanController extends Controller
                 'kategori_lain' => 'required|string',
             ]);
         }
+        if ($request->aset == 0) {
+            $this->validate($request, [
+                'aset_lain' => 'required|string',
+            ]);
+        }
 
 
         $laporan = Laporan::find($id);
         $laporan->lokasi = $request->lokasi;
         $laporan->kategori = $request->kategori;
         $laporan->kategori_lain = $request->kategori == 0 ? $request->kategori_lain : null;
+        $laporan->aset = $request->aset;
+        $laporan->aset_lain = $request->aset == 0 ? $request->kategori_lain : null;
         $laporan->deskripsi = $request->deskripsi;
         $laporan->immediate_action = $request->immediate_action;
         $laporan->prevention = $request->prevention;
@@ -477,6 +504,8 @@ class LaporanController extends Controller
         $laporan->lokasi = request()->lokasi ?? $laporan->lokasi;
         $laporan->kategori = request()->kategori ?? $laporan->kategori;
         $laporan->kategori_lain = request()->kategori_lain ?? $laporan->kategori_lain;
+        $laporan->aset = request()->aset ?? $laporan->aset;
+        $laporan->aset_lain = request()->aset_lain ?? $laporan->aset_lain;
         $laporan->deskripsi = request()->deskripsi ?? $laporan->deskripsi;
 
         if (request()->hasFile('image')) {
