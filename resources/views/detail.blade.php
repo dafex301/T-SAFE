@@ -27,7 +27,7 @@
 
                     @if ($laporan->dpnp_rejected)
                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong>Peringatan!</strong> Laporan ini ditolak oleh DPnP
+                            <strong>Peringatan!</strong> Laporan ini ditolak oleh PnP
                             <br>
                             <strong>Alasan:</strong>
                             {{ $laporan->dpnp_rejected_reason }}

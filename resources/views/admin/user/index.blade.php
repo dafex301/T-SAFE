@@ -5,6 +5,15 @@
         <div class="container-lg">
             <div class="row">
                 <div class="col-12">
+                    @if (session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @elseif (session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
                     <div class="card mb-4">
                         <div class="card-header">
                             <div class="d-flex justify-content-between align-items-center w-100">
@@ -26,8 +35,9 @@
                                         <thead class="thead-dark">
                                             <tr>
                                                 <th scope="col">No</th>
+                                                <th scope="col">NIK</th>
                                                 <th scope="col">Nama</th>
-                                                <th scope="col">Email</th>
+                                                <th scope="col">Cabang</th>
                                                 <th scope="col">Username</th>
                                                 <th scope="col">Role</th>
                                                 <th scope="col">Aksi</th>
@@ -39,8 +49,9 @@
                                                 <tr>
                                                     <th scope="row">{{ $loop->iteration }}</th>
                                                     <th scope="row">{{ $u->name }}</th>
-                                                    <td scope="">{{ $u->email }}</td>
+                                                    <th scope="row">{{ $u->nik }}</th>
                                                     <td scope="">{{ $u->username }}</td>
+                                                    <td scope="">{{ $u->Cabang->name }}</td>
                                                     <td scope="">{{ $u->Role->name }}</td>
                                                     <td>
                                                         <button type="button" class="btn btn-outline-primary"
@@ -48,7 +59,8 @@
                                                             data-id="{{ $u->id }}" data-name="{{ $u->name }}"
                                                             data-email="{{ $u->email }}"
                                                             data-username="{{ $u->username }}"
-                                                            data-role="{{ $u->role }}" data-nik="{{ $u->nik }}">
+                                                            data-role="{{ $u->role }}"
+                                                            data-nik="{{ $u->nik }}">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                                                                 style="height: 20px">
@@ -163,7 +175,11 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="file" class="col-form-label">File CSV</label>
+                            <div class="d-flex align-items-center justify-content-between">
+                                <label for="file" class="col-form-label">File CSV</label>
+
+                                <a class="text-primary" onclick="downloadCSV()">Download Template</a>
+                            </div>
                             <input type="file" accept=".csv" class="form-control" id="file" name="file"
                                 required>
                         </div>
@@ -321,4 +337,38 @@
         })
     </script>
     {{-- End of Delete Script --}}
+
+    {{-- Download CSV --}}
+    <script>
+        function downloadCSV() {
+            // Create a CSV string
+            var csv = [];
+
+            // Add header row
+            var headerRow = ['NIK', 'Nama', 'Username', 'Password', 'Cabang', 'Role'];
+            csv.push(headerRow.join(','));
+
+            // Combine CSV rows into a string
+            var dataRow = ['123456789', 'Nama Pegawai', 'BM1234', 'Password1234', 'Semarang', 'BM'];
+            csv.push(dataRow.join(','));
+            var dataRow = ['123456789', 'Nama Pegawai', 'DPnP1234', 'Password1234', 'Semarang', 'DPnP'];
+            csv.push(dataRow.join(','));
+            var dataRow = ['123456789', 'Nama Pegawai', 'PIC1234', 'Password1234', 'Semarang', 'PIC'];
+            csv.push(dataRow.join(','));
+            var dataRow = ['123456789', 'Nama Pegawai', 'User1234', 'Password1234', 'Semarang', 'User'];
+            csv.push(dataRow.join(','));
+
+            var csvString = csv.join('\n');
+            // Create a Blob and initiate the download
+            var blob = new Blob([csvString], {
+                type: 'text/csv'
+            });
+            var a = document.createElement('a');
+            a.href = window.URL.createObjectURL(blob);
+            a.download = 'data_user.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    </script>
 @endsection

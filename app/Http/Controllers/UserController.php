@@ -39,7 +39,7 @@ class UserController extends Controller
     public function index()
     {
         return view('admin.user.index', [
-            'users' => User::all(),
+            'users' => User::orderBy('updated_at', 'desc')->get(),
             'role' => Role::all(),
             'cabang' => Cabang::all()
         ]);
@@ -95,7 +95,7 @@ class UserController extends Controller
             'cabang' => $data['cabang'],
             'username' => $data['username'],
             'role' => $data['role'],
-            'password' => bcrypt($data['password']),
+            'password' => $data['password'],
         ]);
 
         return redirect('/admin/akun')->with('success', "User successfully created.");
@@ -121,14 +121,14 @@ class UserController extends Controller
             $roleId = $roleMap[$data[5]] ?? null;
 
             if ($cabangId !== null && $roleId !== null) {
-                $user = User::firstOrNew(['username' => $data[3], 'nik' => $data[1]]);
+                $user = User::firstOrNew(['nik' => $data[0]]);
 
                 if (!$user->exists) {
-                    $user->name = $data[0];
-                    $user->email = $data[2];
+                    $user->name = $data[1];
+                    $user->username = $data[2];
+                    $user->password = $data[3];
                     $user->cabang = $cabangId;
                     $user->role = $roleId;
-                    $user->password = $data[6];
                     $user->save();
                 }
             }

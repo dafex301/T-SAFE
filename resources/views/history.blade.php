@@ -54,9 +54,9 @@
                                                         @elseif ($l->branch_manager_rejected)
                                                             <span class="badge text-bg-danger">Ditolak BM</span>
                                                         @elseif ($l->dpnp_rejected)
-                                                            <span class="badge text-bg-danger">Ditolak DPnP</span>
+                                                            <span class="badge text-bg-danger">Ditolak PnP</span>
                                                         @elseif ($l->branch_manager_checked)
-                                                            <span class="badge text-bg-info">Diproses DPnP</span>
+                                                            <span class="badge text-bg-info">Diproses PnP</span>
                                                         @elseif ($l->pic_checked)
                                                             <span class="badge text-bg-info">Diproses BM</span>
                                                         @else
