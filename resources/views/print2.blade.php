@@ -59,7 +59,7 @@
         <p style="font-weight: 800">Evidence</p>
         <p>{{ storage_path('app\\public\\image/1679221570_Barcelona_Prof. Tobin Gutkowski.png') }}</p>
         {{-- <img src="/storage/image/1679221570_Barcelona_Prof. Tobin Gutkowski.png" alt="Responsive image"> --}}
-        <img src="{{ url('storage/image/1677473996_Tembalang_Dr. Wellington Bailey.jpg') }}" alt="Responsive image">
+        <img src="{{ url('storage/image/1677473996_Tembalang_Dr. Wellington Bailey.jpg') }}" alt="Responsive image test">
     </div>
     <p style="font-weight: 800">TINDAK LANJUT</p>
     <div style="border: 1px solid black; padding: 10px">
