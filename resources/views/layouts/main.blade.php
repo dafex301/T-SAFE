@@ -141,7 +141,7 @@
                                 <path
                                     d="M5.25 5.25a3 3 0 00-3 3v10.5a3 3 0 003 3h10.5a3 3 0 003-3V13.5a.75.75 0 00-1.5 0v5.25a1.5 1.5 0 01-1.5 1.5H5.25a1.5 1.5 0 01-1.5-1.5V8.25a1.5 1.5 0 011.5-1.5h5.25a.75.75 0 000-1.5H5.25z" />
                             </svg>
-                            Lapor Potensi Bahaya</a></li>
+                            Lapor Kerusakan Aset</a></li>
                     <li class="nav-item"><a class="nav-link" href="/laporan">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                 style="width: 20px; margin: 0 5px 0 5px">

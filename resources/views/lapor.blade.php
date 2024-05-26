@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card mb-4">
-                        <div class="card-header"><strong>Lapor Potensi Bahaya</strong></div>
+                        <div class="card-header"><strong>Lapor Kerusakan</strong></div>
                         <form action="{{ route('lapor.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body">
@@ -83,14 +83,14 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="mb-3">
+                                        <div class="mb-3" style="display: none">
                                             <label class="form-label" for="jenis">Jenis / Kategori Potensi Bahaya</label>
                                             <select class="form-select" aria-label="Jenis" id="jenis" name="kategori">
-                                                @if (old('kategori') == null)
+                                                {{-- @if (old('kategori') == null)
                                                     <option value="" disabled selected>Pilih Jenis / Kategori</option>
                                                 @else
                                                     <option value="" disabled>Pilih Jenis / Kategori</option>
-                                                @endif
+                                                @endif --}}
                                                 {{-- Foreach kategori --}}
                                                 @foreach ($kategori as $item)
                                                     @if (old('kategori') == $item->id)
@@ -103,7 +103,8 @@
                                                 @if (old('kategori') == '0')
                                                     <option selected value="0">Lain-lain</option>
                                                 @else
-                                                    <option value="0">Lain-lain</option>
+                                                    {{-- <option value="0">Lain-lain</option> --}}
+                                                    <option value="0" selected>Lain-lain</option>
                                                 @endif
                                                 {{-- End Foreach --}}
                                             </select>
@@ -113,16 +114,21 @@
                                                 </div>
                                             @enderror
                                         </div>
-                                        <div class="mb-3" id="jenis-lain-container" style="display: none">
-                                            <label class="form-label" for="jenis-lain">Jenis / Kategori</label>
-                                            <input class="form-control" name="kategori_lain" id="jenis-lain" type="text"
-                                                placeholder="" value="{{ old('kategori_lain') }}">
-                                            @error('kategori_lain')
-                                                <div class="text-danger">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
+                                        <div style="display:none">
+                                            <div class="mb-3" id="jenis-lain-container" style="display: none">
+                                                <label class="form-label" for="jenis-lain">Jenis / Kategori</label>
+                                                {{-- <input class="form-control" name="kategori_lain" id="jenis-lain" type="text"
+                                                placeholder="" value="{{ old('kategori_lain') }}"> --}}
+                                                <input class="form-control" name="kategori_lain" id="jenis-lain"
+                                                    type="text" placeholder="" value="-">
+                                                @error('kategori_lain')
+                                                    <div class="text-danger">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
                                         </div>
+
                                         <div class="mb-3">
                                             <label class="form-label" for="deskripsi">Deskripsi</label>
                                             <textarea class="form-control" id="deskripsi" type="text" placeholder="" name="deskripsi"
