@@ -113,7 +113,7 @@
                                     d="M12.971 1.816A5.23 5.23 0 0114.25 5.25v1.875c0 .207.168.375.375.375H16.5a5.23 5.23 0 013.434 1.279 9.768 9.768 0 00-6.963-6.963z" />
                             </svg>
 
-                            Laporan Potensi Bahaya</a></li>
+                            Laporan Kerusakan</a></li>
                 @endif
                 <li class="nav-item"><a class="nav-link" href="/history">
 

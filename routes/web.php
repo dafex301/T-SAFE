@@ -32,6 +32,11 @@ Route::group(['namespace' => 'App\Http\Controllers'], function () {
         Route::get('/profile', 'UserController@show')->name('user.profile');
         Route::post('/update-password', 'UserController@updatePassword')->name('password.update');
 
+        // K3 Routes
+        Route::get('/k3', 'K3Controller@create')->name('k3.create');
+        Route::post('/k3', 'K3Controller@store')->name('k3.store');
+
+
         // Lapor Routes
         Route::get('/lapor', 'LaporanController@create')->name('lapor.create');
         Route::post('/lapor', 'LaporanController@store')->name('lapor.store');

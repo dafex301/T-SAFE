@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card mb-4">
-                        <div class="card-header"><strong>Laporan Potensi Bahaya</strong></div>
+                        <div class="card-header"><strong>Laporan Kerusakan</strong></div>
                         <form action="" method="post">
 
                             <div class="card-body">
