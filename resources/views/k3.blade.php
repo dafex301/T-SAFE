@@ -6,7 +6,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card mb-4">
-                        <div class="card-header"><strong>Form Evaluasi Alat Kerja</strong></div>
+                        <div class="card-header"><strong>Form Evaluasi Alat K3</strong></div>
                         <form action="{{ route('k3.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="card-body">
@@ -16,7 +16,7 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col">No</th>
-                                                <th scope="col">Jenis Alat Kerja</th>
+                                                <th scope="col">Jenis Alat K3</th>
                                                 <th scope="col">QTY</th>
                                                 <th scope="col">Kondisi</th>
                                                 <th scope="col">Keterangan</th>
@@ -35,7 +35,9 @@
                                                     <input class="ms-4" type="checkbox" name="tidak_layak[]">
                                                     <label for="tidak_layak">Tidak Layak</label>
                                                 </td>
-                                                <td></td>
+                                                <td>
+                                                    <textarea name="" id="" cols="30" rows="2"></textarea>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">2</th>
@@ -49,7 +51,9 @@
                                                     <input class="ms-4" type="checkbox" name="tidak_layak[]">
                                                     <label for="tidak_layak">Tidak Layak</label>
                                                 </td>
-                                                <td></td>
+                                                <td>
+                                                    <textarea name="" id="" cols="30" rows="2"></textarea>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">3</th>
@@ -63,7 +67,9 @@
                                                     <input class="ms-4" type="checkbox" name="tidak_layak[]">
                                                     <label for="tidak_layak">Tidak Layak</label>
                                                 </td>
-                                                <td></td>
+                                                <td>
+                                                    <textarea name="" id="" cols="30" rows="2"></textarea>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">4</th>
@@ -77,7 +83,9 @@
                                                     <input class="ms-4" type="checkbox" name="tidak_layak[]">
                                                     <label for="tidak_layak">Tidak Layak</label>
                                                 </td>
-                                                <td></td>
+                                                <td>
+                                                    <textarea name="" id="" cols="30" rows="2"></textarea>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">5</th>
@@ -91,7 +99,9 @@
                                                     <input class="ms-4" type="checkbox" name="tidak_layak[]">
                                                     <label for="tidak_layak">Tidak Layak</label>
                                                 </td>
-                                                <td></td>
+                                                <td>
+                                                    <textarea name="" id="" cols="30" rows="2"></textarea>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">6</th>
@@ -105,7 +115,9 @@
                                                     <input class="ms-4" type="checkbox" name="tidak_layak[]">
                                                     <label for="tidak_layak">Tidak Layak</label>
                                                 </td>
-                                                <td></td>
+                                                <td>
+                                                    <textarea name="" id="" cols="30" rows="2"></textarea>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">7</th>
@@ -119,7 +131,9 @@
                                                     <input class="ms-4" type="checkbox" name="tidak_layak[]">
                                                     <label for="tidak_layak">Tidak Layak</label>
                                                 </td>
-                                                <td></td>
+                                                <td>
+                                                    <textarea name="" id="" cols="30" rows="2"></textarea>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">8</th>
@@ -133,7 +147,9 @@
                                                     <input class="ms-4" type="checkbox" name="tidak_layak[]">
                                                     <label for="tidak_layak">Tidak Layak</label>
                                                 </td>
-                                                <td></td>
+                                                <td>
+                                                    <textarea name="" id="" cols="30" rows="2"></textarea>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">9</th>
@@ -147,7 +163,9 @@
                                                     <input class="ms-4" type="checkbox" name="tidak_layak[]">
                                                     <label for="tidak_layak">Tidak Layak</label>
                                                 </td>
-                                                <td></td>
+                                                <td>
+                                                    <textarea name="" id="" cols="30" rows="2"></textarea>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">10</th>
@@ -161,7 +179,9 @@
                                                     <input class="ms-4" type="checkbox" name="tidak_layak[]">
                                                     <label for="tidak_layak">Tidak Layak</label>
                                                 </td>
-                                                <td></td>
+                                                <td>
+                                                    <textarea name="" id="" cols="30" rows="2"></textarea>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">11</th>
@@ -175,7 +195,9 @@
                                                     <input class="ms-4" type="checkbox" name="tidak_layak[]">
                                                     <label for="tidak_layak">Tidak Layak</label>
                                                 </td>
-                                                <td></td>
+                                                <td>
+                                                    <textarea name="" id="" cols="30" rows="2"></textarea>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <th scope="row">12</th>
@@ -189,7 +211,9 @@
                                                     <input class="ms-4" type="checkbox" name="tidak_layak[]">
                                                     <label for="tidak_layak">Tidak Layak</label>
                                                 </td>
-                                                <td></td>
+                                                <td>
+                                                    <textarea name="" id="" cols="30" rows="2"></textarea>
+                                                </td>
                                             </tr>
 
                                         </tbody>
